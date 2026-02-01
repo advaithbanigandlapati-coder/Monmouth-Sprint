@@ -1664,22 +1664,23 @@
 
                 const initials = player.name.substring(0, 2).toUpperCase();
 
-                let statsHTML = '<div class="stats-grid">';
-                for (const [key, value] of Object.entries(player.stats)) {
-                    const level = value < 30 ? 'Beginner' : value < 60 ? 'Intermediate' : value < 85 ? 'Advanced' : 'Expert';
-                    statsHTML += `
-                        <div class="stat-row">
-                            <div class="stat-label">
-                                <span>${statLabels[key]}</span>
-                                <span class="stat-value">${level} (${value})</span>
-                            </div>
-                            <div class="slider-container">
-                                <div class="slider-fill" style="width: ${value}%"></div>
-                            </div>
-                        </div>
-                    `;
-                }
-                statsHTML += '</div>';
+                        let statsHTML = '<div class="stats-grid">';
+for (const [key, value] of Object.entries(player.stats)) {
+    const level = value < 3 ? 'Beginner' : value < 6 ? 'Intermediate' : value < 8.5 ? 'Advanced' : 'Expert';
+    const percentage = (value / 10) * 100; // Convert 0-10 to 0-100 percentage
+    statsHTML += `
+        <div class="stat-row">
+            <div class="stat-label">
+                <span>${statLabels[key]}</span>
+                <span class="stat-value">${level} (${value}/10)</span>
+            </div>
+            <div class="slider-container">
+                <div class="slider-fill" style="width: ${percentage}%"></div>
+            </div>
+        </div>
+    `;
+}
+statsHTML += '</div>';
 
                 card.innerHTML = `
                     <div class="player-header">
