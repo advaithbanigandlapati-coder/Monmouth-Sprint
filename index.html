@@ -1,0 +1,1940 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monmouth Sprint</title>
+    
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="favicon-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="favicon-512x512.png">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --sunset-orange: #FF6B35;
+            --terracotta: #D65A31;
+            --warm-amber: #F7931E;
+            --sand: #F4E5D3;
+            --deep-sienna: #A63D29;
+            --cream: #FFF8F0;
+            --burnt-umber: #6B2C1F;
+            --coral: #FF8B6A;
+            --dark-bg: #2A1810;
+            --post-it-yellow: #FFEB3B;
+            --post-it-pink: #FF6B9D;
+            --post-it-blue: #4FC3F7;
+            --post-it-green: #81C784;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--cream) 0%, var(--sand) 100%);
+            color: var(--burnt-umber);
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 248, 240, 0.98);
+            backdrop-filter: blur(12px);
+            z-index: 1000;
+            padding: 1.2rem 2rem;
+            box-shadow: 0 2px 20px rgba(166, 61, 41, 0.08);
+            border-bottom: 2px solid rgba(255, 107, 53, 0.1);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 2.5rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--burnt-umber);
+            font-weight: 600;
+            font-size: 0.95rem;
+            letter-spacing: 0.5px;
+            position: relative;
+            transition: color 0.3s ease;
+            text-transform: uppercase;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--sunset-orange);
+            transition: width 0.3s ease;
+        }
+
+        nav a:hover {
+            color: var(--sunset-orange);
+        }
+
+        nav a:hover::after,
+        nav a.active::after {
+            width: 100%;
+        }
+
+        /* Page Sections */
+        .page {
+            display: none;
+            min-height: 100vh;
+            padding: 100px 2rem 3rem;
+        }
+
+        .page.active {
+            display: block;
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Home Page */
+        #home {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            min-height: 100vh;
+            position: relative;
+            padding: 0 2rem 4rem;
+        }
+
+        .hero-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: radial-gradient(circle at 30% 40%, rgba(255, 107, 53, 0.15), transparent 50%),
+                        radial-gradient(circle at 70% 60%, rgba(247, 147, 30, 0.1), transparent 50%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .hero-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(4rem, 12vw, 10rem);
+            color: var(--sunset-orange);
+            letter-spacing: 8px;
+            margin-bottom: 0.5rem;
+            animation: slideDown 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            text-shadow: 3px 3px 0 rgba(214, 90, 49, 0.3);
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-80px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            color: var(--terracotta);
+            font-weight: 500;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 3rem;
+            animation: fadeIn 0.8s ease 0.3s backwards;
+        }
+
+        .scroll-indicator {
+            position: fixed;
+            bottom: 3rem;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.85rem;
+            color: var(--terracotta);
+            font-weight: 500;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            animation: bounce 2s infinite;
+            z-index: 10;
+            transition: opacity 0.3s ease;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(-10px); }
+        }
+
+        /* Credits Section */
+        .credits-section {
+            position: relative;
+            z-index: 1;
+            background: white;
+            border-radius: 20px;
+            padding: 3rem;
+            margin-top: 8rem;
+            max-width: 700px;
+            box-shadow: 0 10px 50px rgba(166, 61, 41, 0.15);
+        }
+
+        .credits-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2.5rem;
+            color: var(--sunset-orange);
+            letter-spacing: 3px;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .credits-list {
+            list-style: none;
+        }
+
+        .credits-item {
+            background: linear-gradient(135deg, var(--cream), var(--sand));
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border-radius: 12px;
+            border-left: 4px solid var(--sunset-orange);
+        }
+
+        .credits-label {
+            font-weight: 700;
+            color: var(--terracotta);
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .credits-value {
+            color: var(--burnt-umber);
+            font-size: 1.05rem;
+            line-height: 1.6;
+        }
+
+        /* News Page */
+        .news-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .page-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(3rem, 8vw, 5rem);
+            color: var(--sunset-orange);
+            letter-spacing: 4px;
+            margin-bottom: 1rem;
+        }
+
+        .page-subtitle {
+            color: var(--terracotta);
+            font-size: 1.1rem;
+            font-weight: 400;
+        }
+
+        .news-article {
+            background: white;
+            border-radius: 16px;
+            padding: 3rem;
+            margin-bottom: 2.5rem;
+            box-shadow: 0 4px 30px rgba(166, 61, 41, 0.1);
+            border-left: 6px solid var(--sunset-orange);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .news-article::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, transparent 0%, rgba(255, 107, 53, 0.03) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .news-article:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(166, 61, 41, 0.2);
+        }
+
+        .news-article:hover::before {
+            opacity: 1;
+        }
+
+        .news-article h2 {
+            font-family: 'Bebas Neue', sans-serif;
+            color: var(--terracotta);
+            margin-bottom: 0.8rem;
+            font-size: 2.2rem;
+            letter-spacing: 2px;
+            line-height: 1.2;
+        }
+
+        .news-meta {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .news-date,
+        .news-category {
+            color: var(--sunset-orange);
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .news-category {
+            color: var(--warm-amber);
+        }
+
+        .news-article p {
+            line-height: 1.9;
+            color: var(--burnt-umber);
+            font-size: 1.05rem;
+            margin-bottom: 1rem;
+        }
+
+        .news-credit {
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 2px solid var(--sand);
+            font-style: italic;
+            color: var(--terracotta);
+            font-weight: 600;
+        }
+
+        /* Rankings Page */
+        .rankings-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .player-card {
+            background: white;
+            border-radius: 20px;
+            padding: 3rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 8px 40px rgba(166, 61, 41, 0.12);
+            border-top: 6px solid var(--warm-amber);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .player-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 50px rgba(166, 61, 41, 0.2);
+        }
+
+        .player-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+
+        .player-info {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .player-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--sunset-orange), var(--warm-amber));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 700;
+            color: white;
+            font-family: 'Bebas Neue', sans-serif;
+            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+        }
+
+        .player-name {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2.5rem;
+            color: var(--terracotta);
+            letter-spacing: 2px;
+        }
+
+        .overall-rating {
+            background: linear-gradient(135deg, var(--sunset-orange), var(--warm-amber));
+            color: white;
+            padding: 1.2rem 2.5rem;
+            border-radius: 50px;
+            font-size: 1.8rem;
+            font-weight: 700;
+            font-family: 'Bebas Neue', sans-serif;
+            letter-spacing: 2px;
+            box-shadow: 0 4px 20px rgba(255, 107, 53, 0.3);
+        }
+
+        .player-description {
+            color: var(--deep-sienna);
+            margin-bottom: 2.5rem;
+            font-size: 1.05rem;
+            font-style: italic;
+            line-height: 1.7;
+        }
+
+        .stats-grid {
+            display: grid;
+            gap: 1.8rem;
+        }
+
+        .stat-row {
+            background: var(--cream);
+            padding: 1.2rem;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .stat-row:hover {
+            background: var(--sand);
+            transform: translateX(5px);
+        }
+
+        .stat-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.8rem;
+            font-weight: 600;
+            color: var(--burnt-umber);
+            font-size: 0.95rem;
+        }
+
+        .stat-value {
+            color: var(--sunset-orange);
+            font-weight: 700;
+        }
+
+        .slider-container {
+            position: relative;
+            height: 14px;
+            background: rgba(214, 90, 49, 0.15);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .slider-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--warm-amber), var(--sunset-orange));
+            border-radius: 10px;
+            transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 2px 10px rgba(255, 107, 53, 0.4);
+            position: relative;
+        }
+
+        .slider-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 4px;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        /* Files Page */
+        .files-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .password-protect {
+            text-align: center;
+            max-width: 450px;
+            margin: 50px auto;
+            background: white;
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(166, 61, 41, 0.15);
+        }
+
+        .password-protect h2 {
+            font-family: 'Bebas Neue', sans-serif;
+            color: var(--terracotta);
+            font-size: 2rem;
+            letter-spacing: 2px;
+            margin-bottom: 1rem;
+        }
+
+        .password-protect p {
+            color: var(--burnt-umber);
+            margin-bottom: 1.5rem;
+        }
+
+        .password-protect input {
+            width: 100%;
+            padding: 1.2rem;
+            border: 2px solid var(--sand);
+            border-radius: 12px;
+            font-size: 1.05rem;
+            margin: 1rem 0;
+            background: var(--cream);
+            font-family: 'Inter', sans-serif;
+            transition: border-color 0.3s ease;
+        }
+
+        .password-protect input:focus {
+            outline: none;
+            border-color: var(--sunset-orange);
+        }
+
+        .password-protect button {
+            width: 100%;
+            padding: 1.2rem;
+            background: linear-gradient(135deg, var(--sunset-orange), var(--warm-amber));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .password-protect button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.4);
+        }
+
+        .file-links {
+            display: none;
+            background: white;
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 10px 40px rgba(166, 61, 41, 0.15);
+        }
+
+        .file-links.unlocked {
+            display: block;
+        }
+
+        .file-links h2 {
+            font-family: 'Bebas Neue', sans-serif;
+            color: var(--terracotta);
+            font-size: 2rem;
+            letter-spacing: 2px;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .file-link-item {
+            background: linear-gradient(135deg, var(--cream), var(--sand));
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            border-left: 5px solid var(--sunset-orange);
+            transition: all 0.3s ease;
+        }
+
+        .file-link-item:hover {
+            transform: translateX(10px);
+            box-shadow: 0 5px 20px rgba(166, 61, 41, 0.15);
+        }
+
+        .file-link-item a {
+            color: var(--terracotta);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .file-link-item a:hover {
+            color: var(--sunset-orange);
+        }
+
+        .file-icon {
+            font-size: 1.5rem;
+        }
+
+        /* Contact Page */
+        .contact-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .contact-info {
+            background: white;
+            border-radius: 20px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 40px rgba(166, 61, 41, 0.15);
+            text-align: center;
+        }
+
+        .contact-info h3 {
+            font-family: 'Bebas Neue', sans-serif;
+            color: var(--terracotta);
+            font-size: 1.8rem;
+            letter-spacing: 2px;
+            margin-bottom: 2rem;
+        }
+
+        .contact-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .contact-link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1.5rem;
+            background: var(--cream);
+            border-radius: 12px;
+            text-decoration: none;
+            color: var(--burnt-umber);
+            transition: all 0.3s ease;
+            min-width: 150px;
+        }
+
+        .contact-link:hover {
+            background: var(--sunset-orange);
+            color: white;
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(255, 107, 53, 0.3);
+        }
+
+        .contact-icon {
+            font-size: 2rem;
+        }
+
+        .contact-label {
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .contact-value {
+            font-size: 0.85rem;
+        }
+
+        .contact-form {
+            background: white;
+            border-radius: 20px;
+            padding: 3.5rem;
+            box-shadow: 0 10px 50px rgba(166, 61, 41, 0.12);
+        }
+
+        .form-group {
+            margin-bottom: 2rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.7rem;
+            font-weight: 600;
+            color: var(--terracotta);
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 1.2rem;
+            border: 2px solid var(--sand);
+            border-radius: 12px;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: var(--cream);
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--sunset-orange);
+            background: white;
+        }
+
+        .form-group textarea {
+            min-height: 180px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 1.4rem;
+            background: linear-gradient(135deg, var(--sunset-orange), var(--warm-amber));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-family: 'Bebas Neue', sans-serif;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.4);
+        }
+
+        /* Bulletin Board - Post-it Note Style */
+        .bulletin-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Polls Page */
+        .polls-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .poll-card {
+            background: white;
+            border-radius: 20px;
+            padding: 3rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 10px 40px rgba(166, 61, 41, 0.15);
+            border-top: 5px solid var(--sunset-orange);
+        }
+
+        .poll-question {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2rem;
+            color: var(--terracotta);
+            letter-spacing: 2px;
+            margin-bottom: 2rem;
+        }
+
+        .poll-responses {
+            margin-bottom: 2rem;
+        }
+
+        .poll-response-item {
+            background: linear-gradient(135deg, var(--cream), var(--sand));
+            padding: 1.2rem;
+            margin-bottom: 1rem;
+            border-radius: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 4px solid var(--warm-amber);
+        }
+
+        .poll-response-name {
+            font-weight: 700;
+            color: var(--terracotta);
+            font-size: 1.1rem;
+        }
+
+        .poll-response-answer {
+            color: var(--burnt-umber);
+            font-size: 1.05rem;
+            padding: 0.5rem 1.5rem;
+            background: white;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+
+        .poll-response-answer.yes {
+            background: #81C784;
+            color: white;
+        }
+
+        .poll-response-answer.no {
+            background: #E57373;
+            color: white;
+        }
+
+        .poll-response-answer.maybe {
+            background: #FFD54F;
+            color: var(--burnt-umber);
+        }
+
+        .poll-add-response {
+            background: var(--cream);
+            padding: 2rem;
+            border-radius: 12px;
+            margin-top: 2rem;
+        }
+
+        .poll-add-response h4 {
+            font-family: 'Bebas Neue', sans-serif;
+            color: var(--terracotta);
+            font-size: 1.5rem;
+            letter-spacing: 1px;
+            margin-bottom: 1rem;
+        }
+
+        .poll-input-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .poll-input-group input {
+            padding: 1rem;
+            border: 2px solid var(--sand);
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+        }
+
+        .poll-input-group input:focus {
+            outline: none;
+            border-color: var(--sunset-orange);
+        }
+
+        .poll-button-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .poll-response-btn {
+            flex: 1;
+            min-width: 100px;
+            padding: 1rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .poll-response-btn.yes-btn {
+            background: #81C784;
+            color: white;
+        }
+
+        .poll-response-btn.yes-btn:hover {
+            background: #66BB6A;
+            transform: translateY(-2px);
+        }
+
+        .poll-response-btn.no-btn {
+            background: #E57373;
+            color: white;
+        }
+
+        .poll-response-btn.no-btn:hover {
+            background: #EF5350;
+            transform: translateY(-2px);
+        }
+
+        .poll-response-btn.maybe-btn {
+            background: #FFD54F;
+            color: var(--burnt-umber);
+        }
+
+        .poll-response-btn.maybe-btn:hover {
+            background: #FFCA28;
+            transform: translateY(-2px);
+        }
+
+        .create-poll-form {
+            display: none;
+            background: white;
+            border-radius: 20px;
+            padding: 3rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 10px 40px rgba(166, 61, 41, 0.15);
+        }
+
+        .create-poll-form.unlocked {
+            display: block;
+        }
+
+        .create-poll-form h3 {
+            font-family: 'Bebas Neue', sans-serif;
+            color: var(--terracotta);
+            font-size: 2rem;
+            letter-spacing: 2px;
+            margin-bottom: 1.5rem;
+        }
+
+        .create-poll-form input {
+            width: 100%;
+            padding: 1.2rem;
+            border: 2px solid var(--sand);
+            border-radius: 12px;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .create-poll-form input:focus {
+            outline: none;
+            border-color: var(--sunset-orange);
+        }
+
+        .create-poll-btn {
+            padding: 1.2rem 2.5rem;
+            background: linear-gradient(135deg, var(--sunset-orange), var(--warm-amber));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.1rem;
+        }
+
+        .create-poll-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.4);
+        }
+
+        .poll-summary {
+            background: var(--cream);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-top: 1.5rem;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .poll-summary-item {
+            text-align: center;
+        }
+
+        .poll-summary-count {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2.5rem;
+            color: var(--sunset-orange);
+            line-height: 1;
+        }
+
+        .poll-summary-label {
+            font-size: 0.9rem;
+            color: var(--burnt-umber);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .bulletin-board {
+            background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
+            border-radius: 20px;
+            padding: 4rem;
+            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.3);
+            min-height: 500px;
+            position: relative;
+        }
+
+        .bulletin-board::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                repeating-linear-gradient(0deg, transparent, transparent 35px, rgba(0,0,0,.1) 35px, rgba(0,0,0,.1) 37px),
+                repeating-linear-gradient(90deg, transparent, transparent 35px, rgba(0,0,0,.1) 35px, rgba(0,0,0,.1) 37px);
+            border-radius: 20px;
+            pointer-events: none;
+        }
+
+        .post-it-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .post-it {
+            background: var(--post-it-yellow);
+            padding: 2rem 1.5rem;
+            border-radius: 2px;
+            box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.3);
+            position: relative;
+            transition: all 0.3s ease;
+            min-height: 200px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .post-it::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 30px;
+            background: rgba(0, 0, 0, 0.05);
+            border-radius: 2px 2px 0 0;
+        }
+
+        .post-it:nth-child(2) {
+            background: var(--post-it-pink);
+            transform: rotate(-2deg);
+        }
+
+        .post-it:nth-child(3) {
+            background: var(--post-it-blue);
+            transform: rotate(1deg);
+        }
+
+        .post-it:nth-child(4) {
+            background: var(--post-it-green);
+            transform: rotate(-1deg);
+        }
+
+        .post-it:hover {
+            transform: scale(1.05) rotate(0deg) !important;
+            box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.4);
+            z-index: 10;
+        }
+
+        .post-it-date {
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            color: rgba(0, 0, 0, 0.6);
+        }
+
+        .post-it-text {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: rgba(0, 0, 0, 0.85);
+        }
+
+        .post-it-delete {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: rgba(0, 0, 0, 0.3);
+            color: white;
+            border: none;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            font-weight: bold;
+            line-height: 1;
+            transition: all 0.3s ease;
+        }
+
+        .post-it-delete:hover {
+            background: rgba(0, 0, 0, 0.6);
+            transform: scale(1.15);
+        }
+
+        .post-it-delete:hover {
+            background: rgba(0, 0, 0, 0.5);
+            transform: scale(1.1);
+        }
+
+        .add-bulletin-form {
+            display: none;
+            margin-top: 2.5rem;
+            padding: 2.5rem;
+            background: white;
+            border-radius: 16px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .add-bulletin-form.unlocked {
+            display: block;
+        }
+
+        .add-bulletin-form h3 {
+            font-family: 'Bebas Neue', sans-serif;
+            color: var(--terracotta);
+            font-size: 1.8rem;
+            letter-spacing: 2px;
+            margin-bottom: 1.5rem;
+        }
+
+        .add-bulletin-form textarea {
+            width: 100%;
+            padding: 1.2rem;
+            border: 2px solid var(--sand);
+            border-radius: 12px;
+            font-family: 'Inter', sans-serif;
+            min-height: 120px;
+            margin-bottom: 1.5rem;
+            font-size: 1rem;
+        }
+
+        .add-bulletin-form textarea:focus {
+            outline: none;
+            border-color: var(--sunset-orange);
+        }
+
+        .add-bulletin-btn {
+            padding: 1.2rem 2.5rem;
+            background: linear-gradient(135deg, var(--sunset-orange), var(--warm-amber));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.1rem;
+        }
+
+        .add-bulletin-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.4);
+        }
+
+        .error-message {
+            color: var(--terracotta);
+            font-size: 0.9rem;
+            margin-top: 0.8rem;
+            font-weight: 600;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem;
+            }
+
+            nav ul {
+                gap: 0.8rem;
+                padding: 0.5rem;
+            }
+
+            nav a {
+                font-size: 0.75rem;
+                letter-spacing: 0.3px;
+            }
+
+            .page {
+                padding: 90px 1rem 2rem;
+            }
+
+            .hero-title {
+                font-size: 3.5rem;
+                letter-spacing: 3px;
+            }
+
+            .hero-subtitle {
+                font-size: 1rem;
+                letter-spacing: 2px;
+            }
+
+            .player-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .player-info {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .player-name {
+                font-size: 2rem;
+            }
+
+            .overall-rating {
+                padding: 1rem 2rem;
+                font-size: 1.5rem;
+            }
+
+            .news-article,
+            .player-card,
+            .contact-form,
+            .bulletin-board,
+            .poll-card,
+            .create-poll-form {
+                padding: 1.5rem;
+            }
+
+            .page-title {
+                font-size: 2.5rem;
+            }
+
+            .post-it-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .contact-links {
+                flex-direction: column;
+            }
+
+            .poll-input-group {
+                grid-template-columns: 1fr;
+            }
+
+            .poll-button-group {
+                flex-direction: column;
+            }
+
+            .poll-response-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.8rem;
+            }
+
+            .credits-section {
+                padding: 2rem;
+                margin-top: 4rem;
+            }
+
+            .credits-title {
+                font-size: 2rem;
+            }
+
+            .credits-item {
+                padding: 1rem;
+            }
+
+            .news-article h2 {
+                font-size: 1.8rem;
+            }
+
+            .scroll-indicator {
+                bottom: 2rem;
+                font-size: 0.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <ul>
+            <li><a href="#home" class="nav-link active">Home</a></li>
+            <li><a href="#news" class="nav-link">News</a></li>
+            <li><a href="#rankings" class="nav-link">Rankings</a></li>
+            <li><a href="#files" class="nav-link">Files</a></li>
+            <li><a href="#polls" class="nav-link">Polls</a></li>
+            <li><a href="#bulletin" class="nav-link">Plans Board</a></li>
+            <li><a href="#contact" class="nav-link">Contact</a></li>
+        </ul>
+    </nav>
+
+    <!-- Home Page -->
+    <div id="home" class="page active">
+        <div class="hero-bg"></div>
+        <div class="hero-content">
+            <h1 class="hero-title">MONMOUTH<br>SPRINT</h1>
+            <p class="hero-subtitle">Excellence in Motion</p>
+        </div>
+        <div class="scroll-indicator">↓ Scroll Down</div>
+        
+        <!-- Credits Section (scrollable below) -->
+        <div class="credits-section">
+            <h2 class="credits-title">Credits</h2>
+            <ul class="credits-list">
+                <li class="credits-item">
+                    <div class="credits-label">Created By</div>
+                    <div class="credits-value">Advaith</div>
+                </li>
+                <li class="credits-item">
+                    <div class="credits-label">Arjun Files</div>
+                    <div class="credits-value">Abhi, Advaith, Aadi, Rishu</div>
+                </li>
+                <li class="credits-item">
+                    <div class="credits-label">Beautiful First Post</div>
+                    <div class="credits-value">Grok</div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- News Page -->
+    <div id="news" class="page">
+        <div class="news-container">
+            <div class="page-header">
+                <h1 class="page-title">Latest News</h1>
+                <p class="page-subtitle">Stay updated with breaking news and announcements</p>
+            </div>
+            
+            <div class="news-article">
+                <h2>BREAKING: Leaked "Super-Villain Trio" Photo Confirms Epstein, Diddy, and Mysterious Adihkiya Were Planning the World's Most Awkward Pool Party</h2>
+                <div class="news-meta">
+                    <span class="news-date">February 1, 2026</span>
+                    <span class="news-category">Breaking News</span>
+                </div>
+                <p>In a bombshell development that's rocking conspiracy TikTok harder than a malfunctioning fidget spinner, grainy surveillance footage has surfaced showing Jeffrey Epstein, Sean "P. Diddy" Combs, and a shadowy figure identified only as Adihkiya huddled together at what experts are calling "the most cursed Zoom happy hour of 2008."</p>
+                
+                <p>According to sources who definitely exist (trust me, bro), the trio wasn't plotting world domination or running a secret island resort chain. No, no—they were allegedly planning the ultimate VIP foam party, but things got weird fast.</p>
+                
+                <p><strong>Exhibit A: The Guest List Drama</strong><br>
+                Epstein reportedly insisted on inviting only people with private jets "for vibes." Diddy countered with, "Nah, we need at least three celebrity baby oil sponsors and a fog machine that plays my greatest hits." Adihkiya—described by one blurry witness as "kinda looks like a sun god who got lost on his way to Coachella"—quietly suggested adding glow-in-the-dark piñatas filled with... wait for it... legal documents. The room allegedly fell silent for 47 seconds before Epstein muttered, "That's... actually iconic."</p>
+                
+                <p><strong>Exhibit B: The Snack Table Meltdown</strong><br>
+                Things escalated when the charcuterie board arrived. Epstein wanted caviar shaped like tiny islands. Diddy demanded "freak-off flavored" popcorn (patent pending). Adihkiya, ever the chill one, brought homemade solar-powered samosas because "the sun god energy pairs well with chutney." Chaos ensued when someone (allegedly Diddy) tried to "remix" the samosas with baby oil. The fire alarm went off. No one knows why.</p>
+                
+                <p><strong>Exhibit C: The Group Chat Leaks</strong><br>
+                Screenshots obtained from a burner phone buried under a pile of unused party favors reveal the following gems:</p>
+                <ul style="margin-left: 2rem; margin-bottom: 1rem;">
+                    <li>Epstein: "Island next weekend? Bring the vibes 😏"</li>
+                    <li>Diddy: "Only if we get the white parties white party 2.0. Glow sticks mandatory."</li>
+                    <li>Adihkiya: "Guys the sun sets at 7:42. We doing golden hour selfies or what? ☀️🔥"</li>
+                    <li>Epstein: "Adihkiya always bringing that divine positivity. Respect."</li>
+                    <li>Diddy: "Bro you're literally the sun god emoji personified. Teach me your ways."</li>
+                    <li>Adihkiya: "It's easy. Just radiate. Also avoid subpoenas, they block the chakras."</li>
+                </ul>
+                
+                <p><strong>The Twist No One Saw Coming</strong><br>
+                Investigative journalists (okay, one guy on Reddit) now believe Adihkiya wasn't even human—he was a rogue solar deity who accidentally wandered into the wrong elite after-party in the Hamptons and got stuck in the group chat. His only crime? Trying to turn every scandal into a wellness retreat. "Namaste away from the feds," he allegedly texted right before vanishing in a puff of SPF 1000 glitter.</p>
+                
+                <p><strong>Where Are They Now?</strong></p>
+                <ul style="margin-left: 2rem; margin-bottom: 1rem;">
+                    <li><strong>Epstein:</strong> Classic "moved to permanent timeout."</li>
+                    <li><strong>Diddy:</strong> Busy fighting lawsuits and probably still pitching Freak-Off Fest 2026.</li>
+                    <li><strong>Adihkiya:</strong> Last spotted ascending a sunbeam somewhere over Ibiza, yelling "I just wanted to network!"</li>
+                </ul>
+                
+                <p>Moral of the story: Never trust a pool party invite from billionaires... or sun gods. Especially when baby oil is on the rider.</p>
+                
+                <p>Stay goofy, stay hydrated, and maybe don't google this trio at 3 a.m. 😭🕶️☀️</p>
+                
+                <p class="news-credit">MADE BY GROK</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Rankings Page -->
+    <div id="rankings" class="page">
+        <div class="rankings-container">
+            <div class="page-header">
+                <h1 class="page-title">V10 Rankings</h1>
+                <p class="page-subtitle">Comprehensive player performance metrics and evaluations</p>
+            </div>
+            
+            <div id="playerRankings">
+                <!-- Player cards will be generated here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Files Page -->
+    <div id="files" class="page">
+        <div class="files-container">
+            <div class="page-header">
+                <h1 class="page-title">Team Files</h1>
+                <p class="page-subtitle">Access important team documents and resources</p>
+            </div>
+            
+            <div class="password-protect" id="filesPasswordSection">
+                <h2>Protected Access</h2>
+                <p>Enter password to access team files</p>
+                <input type="password" id="filesPassword" placeholder="Enter password">
+                <button onclick="unlockFiles()">Unlock</button>
+                <p class="error-message" id="filesError"></p>
+            </div>
+
+            <div class="file-links" id="fileLinks">
+                <h2>Team Documents</h2>
+                <div class="file-link-item">
+                    <a href="https://docs.google.com/document/d/1hL7bEfj7wqvVCwQhbuVllQbjU4xOxrF6zUR40aZVXZI/edit?usp=sharing" target="_blank">
+                        <span class="file-icon">📄</span>
+                        <span>Main Team Document</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Polls Page -->
+    <div id="polls" class="page">
+        <div class="polls-container">
+            <div class="page-header">
+                <h1 class="page-title">Team Polls</h1>
+                <p class="page-subtitle">Vote and share your availability</p>
+            </div>
+            
+            <div class="password-protect" id="pollsPasswordSection">
+                <h2>Create New Poll</h2>
+                <p>Enter password to create a new poll</p>
+                <input type="password" id="pollsPassword" placeholder="Enter password">
+                <button onclick="unlockPolls()">Unlock</button>
+                <p class="error-message" id="pollsError"></p>
+            </div>
+
+            <div class="create-poll-form" id="createPollForm">
+                <h3>Create New Poll</h3>
+                <input type="text" id="newPollQuestion" placeholder="Enter poll question...">
+                <button class="create-poll-btn" onclick="createNewPoll()">Create Poll</button>
+            </div>
+
+            <div id="pollsList">
+                <!-- Polls will be generated here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Bulletin Board Page -->
+    <div id="bulletin" class="page">
+        <div class="bulletin-container">
+            <div class="page-header">
+                <h1 class="page-title">Plans Board</h1>
+                <p class="page-subtitle">Team announcements and upcoming events</p>
+            </div>
+            
+            <div class="password-protect" id="bulletinPasswordSection">
+                <h2>Post to Board</h2>
+                <p>Enter password to add announcements</p>
+                <input type="password" id="bulletinPassword" placeholder="Enter password">
+                <button onclick="unlockBulletin()">Unlock Posting</button>
+                <p class="error-message" id="bulletinError"></p>
+            </div>
+
+            <div class="bulletin-board">
+                <div class="post-it-grid" id="bulletinBoard">
+                    <!-- Post-it notes will be generated here -->
+                </div>
+            </div>
+
+            <div class="add-bulletin-form" id="addBulletinForm">
+                <h3>Add New Post-It</h3>
+                <textarea id="bulletinText" placeholder="Write your announcement..."></textarea>
+                <button class="add-bulletin-btn" onclick="addBulletinItem()">Add to Board</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Page -->
+    <div id="contact" class="page">
+        <div class="contact-container">
+            <div class="page-header">
+                <h1 class="page-title">Get in Touch</h1>
+                <p class="page-subtitle">Connect with us through various channels</p>
+            </div>
+
+            <div class="contact-info">
+                <h3>Connect With Us</h3>
+                <div class="contact-links">
+                    <a href="https://github.com/advaithbanigandlapati-coder" target="_blank" class="contact-link">
+                        <div class="contact-icon">📁</div>
+                        <div class="contact-label">GitHub</div>
+                        <div class="contact-value">@advaithbanigandlapati-coder</div>
+                    </a>
+                    <a href="mailto:advaith.banigandlapati@gmail.com" class="contact-link">
+                        <div class="contact-icon">📧</div>
+                        <div class="contact-label">Email</div>
+                        <div class="contact-value">advaith.banigandlapati@gmail.com</div>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="contact-form">
+                <h3 style="font-family: 'Bebas Neue', sans-serif; color: var(--terracotta); font-size: 1.8rem; letter-spacing: 2px; margin-bottom: 2rem; text-align: center;">Send a Message</h3>
+                <form onsubmit="handleContactSubmit(event)">
+                    <div class="form-group">
+                        <label for="contactName">Your Name</label>
+                        <input type="text" id="contactName" placeholder="Enter your full name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="contactEmail">Email Address</label>
+                        <input type="email" id="contactEmail" placeholder="your.email@example.com" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="contactSubject">Subject</label>
+                        <input type="text" id="contactSubject" placeholder="What is this regarding?" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="contactMessage">Your Message</label>
+                        <textarea id="contactMessage" placeholder="Tell us what's on your mind..." required></textarea>
+                    </div>
+
+                    <button type="submit" class="submit-btn">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Smooth Navigation
+        const navLinks = document.querySelectorAll('.nav-link');
+        const pages = document.querySelectorAll('.page');
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetPage = link.getAttribute('href').substring(1);
+                
+                // Update active nav link
+                navLinks.forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+                
+                // Hide all pages
+                pages.forEach(p => {
+                    p.classList.remove('active');
+                    p.style.display = 'none';
+                });
+                
+                // Show target page
+                const targetElement = document.getElementById(targetPage);
+                if (targetElement) {
+                    targetElement.style.display = 'block';
+                    targetElement.classList.add('active');
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+            });
+        });
+
+        // Player Rankings Data
+        const playersData = [
+            {
+                name: "Arjun",
+                overall: 0,
+                description: "Add your description here",
+                stats: {
+                    reflexes: 0,
+                    spikes: 0,
+                    sets: 0,
+                    bumps: 0,
+                    safety: 0,
+                    logic: 0,
+                    teamwork: 0
+                }
+            },
+            {
+                name: "Aadi",
+                overall: 0,
+                description: "Add your description here",
+                stats: {
+                    reflexes: 0,
+                    spikes: 0,
+                    sets: 0,
+                    bumps: 0,
+                    safety: 0,
+                    logic: 0,
+                    teamwork: 0
+                }
+            },
+            {
+                name: "Abhi",
+                overall: 0,
+                description: "Add your description here",
+                stats: {
+                    reflexes: 0,
+                    spikes: 0,
+                    sets: 0,
+                    bumps: 0,
+                    safety: 0,
+                    logic: 0,
+                    teamwork: 0
+                }
+            },
+            {
+                name: "Advaith",
+                overall: 0,
+                description: "Add your description here",
+                stats: {
+                    reflexes: 0,
+                    spikes: 0,
+                    sets: 0,
+                    bumps: 0,
+                    safety: 0,
+                    logic: 0,
+                    teamwork: 0
+                }
+            },
+            {
+                name: "Rishu",
+                overall: 0,
+                description: "Add your description here",
+                stats: {
+                    reflexes: 0,
+                    spikes: 0,
+                    sets: 0,
+                    bumps: 0,
+                    safety: 0,
+                    logic: 0,
+                    teamwork: 0
+                }
+            },
+            {
+                name: "Swayam",
+                overall: 0,
+                description: "Add your description here",
+                stats: {
+                    reflexes: 0,
+                    spikes: 0,
+                    sets: 0,
+                    bumps: 0,
+                    safety: 0,
+                    logic: 0,
+                    teamwork: 0
+                }
+            }
+        ];
+
+        // Generate player ranking cards
+        function generatePlayerRankings() {
+            const container = document.getElementById('playerRankings');
+            container.innerHTML = '';
+
+            playersData.forEach((player, index) => {
+                const card = document.createElement('div');
+                card.className = 'player-card';
+                card.style.animationDelay = `${index * 0.1}s`;
+                
+                const statLabels = {
+                    reflexes: 'Reflexes',
+                    spikes: 'Spikes',
+                    sets: 'Sets',
+                    bumps: 'Bumps',
+                    safety: 'Safety (No Fouls)',
+                    logic: 'Logic',
+                    teamwork: 'Teamwork/Coordination'
+                };
+
+                const initials = player.name.substring(0, 2).toUpperCase();
+
+                let statsHTML = '<div class="stats-grid">';
+                for (const [key, value] of Object.entries(player.stats)) {
+                    const level = value < 30 ? 'Beginner' : value < 60 ? 'Intermediate' : value < 85 ? 'Advanced' : 'Expert';
+                    statsHTML += `
+                        <div class="stat-row">
+                            <div class="stat-label">
+                                <span>${statLabels[key]}</span>
+                                <span class="stat-value">${level} (${value})</span>
+                            </div>
+                            <div class="slider-container">
+                                <div class="slider-fill" style="width: ${value}%"></div>
+                            </div>
+                        </div>
+                    `;
+                }
+                statsHTML += '</div>';
+
+                card.innerHTML = `
+                    <div class="player-header">
+                        <div class="player-info">
+                            <div class="player-avatar">${initials}</div>
+                            <h2 class="player-name">${player.name}</h2>
+                        </div>
+                        <div class="overall-rating">${player.overall}/10</div>
+                    </div>
+                    <p class="player-description">${player.description}</p>
+                    ${statsHTML}
+                `;
+                
+                container.appendChild(card);
+            });
+        }
+
+        generatePlayerRankings();
+
+        // Files Page Password Protection
+        function unlockFiles() {
+            const password = document.getElementById('filesPassword').value;
+            const errorElement = document.getElementById('filesError');
+            
+            if (password === 'RishuNoTishu') {
+                document.getElementById('filesPasswordSection').style.display = 'none';
+                document.getElementById('fileLinks').classList.add('unlocked');
+                errorElement.textContent = '';
+            } else {
+                errorElement.textContent = 'Incorrect password. Please try again.';
+            }
+        }
+
+        // Bulletin Board System
+        let bulletinUnlocked = false;
+        const bulletinItems = [
+            { date: 'Next Saturday', text: 'Game night' }
+        ];
+
+        function unlockBulletin() {
+            const password = document.getElementById('bulletinPassword').value;
+            const errorElement = document.getElementById('bulletinError');
+            
+            if (password === 'Swaydih') {
+                bulletinUnlocked = true;
+                document.getElementById('bulletinPasswordSection').style.display = 'none';
+                document.getElementById('addBulletinForm').classList.add('unlocked');
+                errorElement.textContent = '';
+                renderBulletinBoard();
+            } else {
+                errorElement.textContent = 'Incorrect password. Please try again.';
+            }
+        }
+
+        function renderBulletinBoard() {
+            const board = document.getElementById('bulletinBoard');
+            board.innerHTML = '';
+            
+            bulletinItems.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = 'post-it';
+                div.innerHTML = `
+                    <p class="post-it-date">${item.date}</p>
+                    <p class="post-it-text">${item.text}</p>
+                    ${bulletinUnlocked ? `<button class="post-it-delete" onclick="deleteBulletinItem(${index})">×</button>` : ''}
+                `;
+                board.appendChild(div);
+            });
+        }
+
+        function addBulletinItem() {
+            const text = document.getElementById('bulletinText').value;
+            if (text.trim()) {
+                const today = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+                bulletinItems.push({ date: today, text: text });
+                document.getElementById('bulletinText').value = '';
+                renderBulletinBoard();
+            }
+        }
+
+        function deleteBulletinItem(index) {
+            if (confirm('Remove this post-it?')) {
+                bulletinItems.splice(index, 1);
+                renderBulletinBoard();
+            }
+        }
+
+        renderBulletinBoard();
+
+        // Polls System
+        let pollsUnlocked = false;
+        const pollsData = [
+            {
+                id: 1,
+                question: "Game Night Next Saturday",
+                responses: []
+            }
+        ];
+        let pollIdCounter = 2;
+
+        function unlockPolls() {
+            const password = document.getElementById('pollsPassword').value;
+            const errorElement = document.getElementById('pollsError');
+            
+            if (password === 'Rautmare67') {
+                pollsUnlocked = true;
+                document.getElementById('pollsPasswordSection').style.display = 'none';
+                document.getElementById('createPollForm').classList.add('unlocked');
+                errorElement.textContent = '';
+            } else {
+                errorElement.textContent = 'Incorrect password. Please try again.';
+            }
+        }
+
+        function createNewPoll() {
+            const question = document.getElementById('newPollQuestion').value.trim();
+            if (question) {
+                pollsData.push({
+                    id: pollIdCounter++,
+                    question: question,
+                    responses: []
+                });
+                document.getElementById('newPollQuestion').value = '';
+                renderPolls();
+            }
+        }
+
+        function addPollResponse(pollId, name, response) {
+            const poll = pollsData.find(p => p.id === pollId);
+            if (poll && name.trim()) {
+                // Check if person already responded
+                const existingIndex = poll.responses.findIndex(r => r.name.toLowerCase() === name.toLowerCase());
+                if (existingIndex !== -1) {
+                    // Update existing response
+                    poll.responses[existingIndex].response = response;
+                } else {
+                    // Add new response
+                    poll.responses.push({ name: name.trim(), response: response });
+                }
+                renderPolls();
+            }
+        }
+
+        function renderPolls() {
+            const container = document.getElementById('pollsList');
+            container.innerHTML = '';
+
+            pollsData.forEach(poll => {
+                const pollCard = document.createElement('div');
+                pollCard.className = 'poll-card';
+
+                // Calculate summary
+                const yesCount = poll.responses.filter(r => r.response === 'Yes').length;
+                const noCount = poll.responses.filter(r => r.response === 'No').length;
+                const maybeCount = poll.responses.filter(r => r.response === 'Maybe').length;
+
+                let responsesHTML = '';
+                poll.responses.forEach(response => {
+                    const responseClass = response.response.toLowerCase();
+                    responsesHTML += `
+                        <div class="poll-response-item">
+                            <span class="poll-response-name">${response.name}</span>
+                            <span class="poll-response-answer ${responseClass}">${response.response}</span>
+                        </div>
+                    `;
+                });
+
+                pollCard.innerHTML = `
+                    <h3 class="poll-question">${poll.question}</h3>
+                    
+                    <div class="poll-summary">
+                        <div class="poll-summary-item">
+                            <div class="poll-summary-count">${yesCount}</div>
+                            <div class="poll-summary-label">Yes</div>
+                        </div>
+                        <div class="poll-summary-item">
+                            <div class="poll-summary-count">${maybeCount}</div>
+                            <div class="poll-summary-label">Maybe</div>
+                        </div>
+                        <div class="poll-summary-item">
+                            <div class="poll-summary-count">${noCount}</div>
+                            <div class="poll-summary-label">No</div>
+                        </div>
+                    </div>
+
+                    <div class="poll-responses">
+                        ${responsesHTML || '<p style="text-align: center; color: var(--terracotta); font-style: italic;">No responses yet</p>'}
+                    </div>
+
+                    <div class="poll-add-response">
+                        <h4>Add Your Response</h4>
+                        <div class="poll-input-group">
+                            <input type="text" id="poll-name-${poll.id}" placeholder="Your name">
+                        </div>
+                        <div class="poll-button-group">
+                            <button class="poll-response-btn yes-btn" onclick="submitPollResponse(${poll.id}, 'Yes')">Yes</button>
+                            <button class="poll-response-btn maybe-btn" onclick="submitPollResponse(${poll.id}, 'Maybe')">Maybe</button>
+                            <button class="poll-response-btn no-btn" onclick="submitPollResponse(${poll.id}, 'No')">No</button>
+                        </div>
+                    </div>
+                `;
+
+                container.appendChild(pollCard);
+            });
+        }
+
+        function submitPollResponse(pollId, response) {
+            const nameInput = document.getElementById(`poll-name-${pollId}`);
+            const name = nameInput.value.trim();
+            
+            if (!name) {
+                alert('Please enter your name');
+                return;
+            }
+
+            addPollResponse(pollId, name, response);
+            nameInput.value = '';
+        }
+
+        // Initialize polls
+        renderPolls();
+
+        // Contact Form Handler
+        function handleContactSubmit(event) {
+            event.preventDefault();
+            alert('Thank you for your message! We\'ll get back to you as soon as possible.');
+            event.target.reset();
+        }
+
+        // Add enter key support for password fields
+        document.getElementById('filesPassword')?.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') unlockFiles();
+        });
+
+        document.getElementById('bulletinPassword')?.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') unlockBulletin();
+        });
+
+        document.getElementById('pollsPassword')?.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') unlockPolls();
+        });
+
+        // Hide scroll indicator when scrolling on home page
+        let scrollTimeout;
+        window.addEventListener('scroll', function() {
+            const scrollIndicator = document.querySelector('.scroll-indicator');
+            const homePage = document.getElementById('home');
+            
+            if (homePage && homePage.classList.contains('active')) {
+                if (window.scrollY > 100) {
+                    scrollIndicator.style.opacity = '0';
+                } else {
+                    scrollIndicator.style.opacity = '1';
+                }
+            }
+        });
+    </script>
+</body>
+</html>
