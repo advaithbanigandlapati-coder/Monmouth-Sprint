@@ -1523,7 +1523,7 @@
         </div>
     </div>
 
-    <script>
+<script>
         // Smooth Navigation
         const navLinks = document.querySelectorAll('.nav-link');
         const pages = document.querySelectorAll('.page');
@@ -1540,13 +1540,11 @@
                 // Hide all pages
                 pages.forEach(p => {
                     p.classList.remove('active');
-                    p.style.display = 'none';
                 });
                 
                 // Show target page
                 const targetElement = document.getElementById(targetPage);
                 if (targetElement) {
-                    targetElement.style.display = 'block';
                     targetElement.classList.add('active');
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                 }
