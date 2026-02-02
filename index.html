@@ -1098,11 +1098,6 @@
             transform: scale(1.15);
         }
 
-        .post-it-delete:hover {
-            background: rgba(0, 0, 0, 0.5);
-            transform: scale(1.1);
-        }
-
         .add-bulletin-form {
             display: none;
             margin-top: 2.5rem;
@@ -1166,6 +1161,14 @@
             font-size: 0.9rem;
             margin-top: 0.8rem;
             font-weight: 600;
+        }
+
+        /* Loading Indicator */
+        .loading-indicator {
+            text-align: center;
+            padding: 2rem;
+            color: var(--terracotta);
+            font-style: italic;
         }
 
         /* Responsive */
@@ -1438,7 +1441,7 @@
             </div>
 
             <div id="pollsList">
-                <!-- Polls will be generated here -->
+                <div class="loading-indicator">Loading polls...</div>
             </div>
         </div>
     </div>
@@ -1461,7 +1464,7 @@
 
             <div class="bulletin-board">
                 <div class="post-it-grid" id="bulletinBoard">
-                    <!-- Post-it notes will be generated here -->
+                    <div class="loading-indicator">Loading announcements...</div>
                 </div>
             </div>
 
@@ -1526,7 +1529,43 @@
         </div>
     </div>
 
-<script>
+    <!-- Firebase SDK -->
+    <script type="module">
+        // Import Firebase modules
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getDatabase, ref, set, push, onValue, remove, update } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
+
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDV_I-7-TxXJyXY4_bKZkQ8Ujg2Gfdf6Hw",
+            authDomain: "monmouth-sprint.firebaseapp.com",
+            databaseURL: "https://monmouth-sprint-default-rtdb.firebaseio.com",
+            projectId: "monmouth-sprint",
+            storageBucket: "monmouth-sprint.firebasestorage.app",
+            messagingSenderId: "746818497574",
+            appId: "1:746818497574:web:3582de31da1db339d40ae7",
+            measurementId: "G-0HBYG1KM3S"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        // Make database available globally
+        window.firebaseDB = database;
+        window.firebaseRef = ref;
+        window.firebaseSet = set;
+        window.firebasePush = push;
+        window.firebaseOnValue = onValue;
+        window.firebaseRemove = remove;
+        window.firebaseUpdate = update;
+
+        // Initialize data listeners
+        initializePollsListener();
+        initializeBulletinListener();
+    </script>
+
+    <script>
         // Smooth Navigation
         const navLinks = document.querySelectorAll('.nav-link');
         const pages = document.querySelectorAll('.page');
@@ -1664,23 +1703,23 @@
 
                 const initials = player.name.substring(0, 2).toUpperCase();
 
-                        let statsHTML = '<div class="stats-grid">';
-for (const [key, value] of Object.entries(player.stats)) {
-    const level = value < 3 ? 'Beginner' : value < 6 ? 'Intermediate' : value < 8.5 ? 'Advanced' : 'Expert';
-    const percentage = (value / 10) * 100; // Convert 0-10 to 0-100 percentage
-    statsHTML += `
-        <div class="stat-row">
-            <div class="stat-label">
-                <span>${statLabels[key]}</span>
-                <span class="stat-value">${level} (${value}/10)</span>
-            </div>
-            <div class="slider-container">
-                <div class="slider-fill" style="width: ${percentage}%"></div>
-            </div>
-        </div>
-    `;
-}
-statsHTML += '</div>';
+                let statsHTML = '<div class="stats-grid">';
+                for (const [key, value] of Object.entries(player.stats)) {
+                    const level = value < 3 ? 'Beginner' : value < 6 ? 'Intermediate' : value < 8.5 ? 'Advanced' : 'Expert';
+                    const percentage = (value / 10) * 100;
+                    statsHTML += `
+                        <div class="stat-row">
+                            <div class="stat-label">
+                                <span>${statLabels[key]}</span>
+                                <span class="stat-value">${level} (${value}/10)</span>
+                            </div>
+                            <div class="slider-container">
+                                <div class="slider-fill" style="width: ${percentage}%"></div>
+                            </div>
+                        </div>
+                    `;
+                }
+                statsHTML += '</div>';
 
                 card.innerHTML = `
                     <div class="player-header">
@@ -1714,11 +1753,8 @@ statsHTML += '</div>';
             }
         }
 
-        // Bulletin Board System
+        // ==================== BULLETIN BOARD WITH FIREBASE ====================
         let bulletinUnlocked = false;
-        const bulletinItems = [
-            { date: 'Next Saturday', text: 'Game night' }
-        ];
 
         function unlockBulletin() {
             const password = document.getElementById('bulletinPassword').value;
@@ -1729,23 +1765,37 @@ statsHTML += '</div>';
                 document.getElementById('bulletinPasswordSection').style.display = 'none';
                 document.getElementById('addBulletinForm').classList.add('unlocked');
                 errorElement.textContent = '';
-                renderBulletinBoard();
             } else {
                 errorElement.textContent = 'Incorrect password. Please try again.';
             }
         }
 
-        function renderBulletinBoard() {
+        function initializeBulletinListener() {
+            const bulletinRef = window.firebaseRef(window.firebaseDB, 'bulletinItems');
+            window.firebaseOnValue(bulletinRef, (snapshot) => {
+                const data = snapshot.val();
+                renderBulletinBoard(data);
+            });
+        }
+
+        function renderBulletinBoard(data) {
             const board = document.getElementById('bulletinBoard');
             board.innerHTML = '';
             
-            bulletinItems.forEach((item, index) => {
+            if (!data) {
+                board.innerHTML = '<div class="loading-indicator">No announcements yet. Be the first to post!</div>';
+                return;
+            }
+
+            const items = Object.entries(data).map(([id, item]) => ({ id, ...item }));
+            
+            items.forEach((item, index) => {
                 const div = document.createElement('div');
                 div.className = 'post-it';
                 div.innerHTML = `
                     <p class="post-it-date">${item.date}</p>
                     <p class="post-it-text">${item.text}</p>
-                    ${bulletinUnlocked ? `<button class="post-it-delete" onclick="deleteBulletinItem(${index})">×</button>` : ''}
+                    ${bulletinUnlocked ? `<button class="post-it-delete" onclick="deleteBulletinItem('${item.id}')">×</button>` : ''}
                 `;
                 board.appendChild(div);
             });
@@ -1755,31 +1805,37 @@ statsHTML += '</div>';
             const text = document.getElementById('bulletinText').value;
             if (text.trim()) {
                 const today = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-                bulletinItems.push({ date: today, text: text });
-                document.getElementById('bulletinText').value = '';
-                renderBulletinBoard();
+                const bulletinRef = window.firebaseRef(window.firebaseDB, 'bulletinItems');
+                const newItemRef = window.firebasePush(bulletinRef);
+                
+                window.firebaseSet(newItemRef, {
+                    date: today,
+                    text: text,
+                    timestamp: Date.now()
+                }).then(() => {
+                    document.getElementById('bulletinText').value = '';
+                }).catch((error) => {
+                    alert('Error adding announcement: ' + error.message);
+                });
             }
         }
 
-        function deleteBulletinItem(index) {
+        function deleteBulletinItem(itemId) {
             if (confirm('Remove this post-it?')) {
-                bulletinItems.splice(index, 1);
-                renderBulletinBoard();
+                const itemRef = window.firebaseRef(window.firebaseDB, `bulletinItems/${itemId}`);
+                window.firebaseRemove(itemRef).catch((error) => {
+                    alert('Error removing announcement: ' + error.message);
+                });
             }
         }
 
-        renderBulletinBoard();
+        // Make functions globally available
+        window.unlockBulletin = unlockBulletin;
+        window.addBulletinItem = addBulletinItem;
+        window.deleteBulletinItem = deleteBulletinItem;
 
-        // Polls System
+        // ==================== POLLS SYSTEM WITH FIREBASE ====================
         let pollsUnlocked = false;
-        const pollsData = [
-            {
-                id: 1,
-                question: "Game Night Next Saturday",
-                responses: []
-            }
-        ];
-        let pollIdCounter = 2;
 
         function unlockPolls() {
             const password = document.getElementById('pollsPassword').value;
@@ -1798,47 +1854,54 @@ statsHTML += '</div>';
         function createNewPoll() {
             const question = document.getElementById('newPollQuestion').value.trim();
             if (question) {
-                pollsData.push({
-                    id: pollIdCounter++,
+                const pollsRef = window.firebaseRef(window.firebaseDB, 'polls');
+                const newPollRef = window.firebasePush(pollsRef);
+                
+                window.firebaseSet(newPollRef, {
                     question: question,
-                    responses: []
+                    responses: {},
+                    timestamp: Date.now()
+                }).then(() => {
+                    document.getElementById('newPollQuestion').value = '';
+                }).catch((error) => {
+                    alert('Error creating poll: ' + error.message);
                 });
-                document.getElementById('newPollQuestion').value = '';
-                renderPolls();
             }
         }
 
-        function addPollResponse(pollId, name, response) {
-            const poll = pollsData.find(p => p.id === pollId);
-            if (poll && name.trim()) {
-                // Check if person already responded
-                const existingIndex = poll.responses.findIndex(r => r.name.toLowerCase() === name.toLowerCase());
-                if (existingIndex !== -1) {
-                    // Update existing response
-                    poll.responses[existingIndex].response = response;
-                } else {
-                    // Add new response
-                    poll.responses.push({ name: name.trim(), response: response });
-                }
-                renderPolls();
-            }
+        function initializePollsListener() {
+            const pollsRef = window.firebaseRef(window.firebaseDB, 'polls');
+            window.firebaseOnValue(pollsRef, (snapshot) => {
+                const data = snapshot.val();
+                renderPolls(data);
+            });
         }
 
-        function renderPolls() {
+        function renderPolls(data) {
             const container = document.getElementById('pollsList');
             container.innerHTML = '';
 
-            pollsData.forEach(poll => {
+            if (!data) {
+                container.innerHTML = '<div class="loading-indicator">No polls yet. Create the first one!</div>';
+                return;
+            }
+
+            const polls = Object.entries(data).map(([id, poll]) => ({ id, ...poll }));
+
+            polls.forEach(poll => {
                 const pollCard = document.createElement('div');
                 pollCard.className = 'poll-card';
 
+                const responses = poll.responses || {};
+                const responsesArray = Object.entries(responses).map(([name, response]) => ({ name, response }));
+
                 // Calculate summary
-                const yesCount = poll.responses.filter(r => r.response === 'Yes').length;
-                const noCount = poll.responses.filter(r => r.response === 'No').length;
-                const maybeCount = poll.responses.filter(r => r.response === 'Maybe').length;
+                const yesCount = responsesArray.filter(r => r.response === 'Yes').length;
+                const noCount = responsesArray.filter(r => r.response === 'No').length;
+                const maybeCount = responsesArray.filter(r => r.response === 'Maybe').length;
 
                 let responsesHTML = '';
-                poll.responses.forEach(response => {
+                responsesArray.forEach(response => {
                     const responseClass = response.response.toLowerCase();
                     responsesHTML += `
                         <div class="poll-response-item">
@@ -1876,9 +1939,9 @@ statsHTML += '</div>';
                             <input type="text" id="poll-name-${poll.id}" placeholder="Your name">
                         </div>
                         <div class="poll-button-group">
-                            <button class="poll-response-btn yes-btn" onclick="submitPollResponse(${poll.id}, 'Yes')">Yes</button>
-                            <button class="poll-response-btn maybe-btn" onclick="submitPollResponse(${poll.id}, 'Maybe')">Maybe</button>
-                            <button class="poll-response-btn no-btn" onclick="submitPollResponse(${poll.id}, 'No')">No</button>
+                            <button class="poll-response-btn yes-btn" onclick="submitPollResponse('${poll.id}', 'Yes')">Yes</button>
+                            <button class="poll-response-btn maybe-btn" onclick="submitPollResponse('${poll.id}', 'Maybe')">Maybe</button>
+                            <button class="poll-response-btn no-btn" onclick="submitPollResponse('${poll.id}', 'No')">No</button>
                         </div>
                     </div>
                 `;
@@ -1896,12 +1959,20 @@ statsHTML += '</div>';
                 return;
             }
 
-            addPollResponse(pollId, name, response);
-            nameInput.value = '';
+            const responseRef = window.firebaseRef(window.firebaseDB, `polls/${pollId}/responses/${name}`);
+            window.firebaseSet(responseRef, response).then(() => {
+                nameInput.value = '';
+            }).catch((error) => {
+                alert('Error submitting response: ' + error.message);
+            });
         }
 
-        // Initialize polls
-        renderPolls();
+        // Make functions globally available
+        window.unlockPolls = unlockPolls;
+        window.createNewPoll = createNewPoll;
+        window.submitPollResponse = submitPollResponse;
+
+        // ==================== OTHER FUNCTIONALITY ====================
 
         // Contact Form Handler
         function handleContactSubmit(event) {
@@ -1909,6 +1980,8 @@ statsHTML += '</div>';
             alert('Thank you for your message! We\'ll get back to you as soon as possible.');
             event.target.reset();
         }
+
+        window.handleContactSubmit = handleContactSubmit;
 
         // Add enter key support for password fields
         document.getElementById('filesPassword')?.addEventListener('keypress', function(e) {
@@ -1924,7 +1997,6 @@ statsHTML += '</div>';
         });
 
         // Hide scroll indicator when scrolling on home page
-        let scrollTimeout;
         window.addEventListener('scroll', function() {
             const scrollIndicator = document.querySelector('.scroll-indicator');
             const homePage = document.getElementById('home');
