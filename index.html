@@ -30,6 +30,56 @@
             --post-it-blue: #4FC3F7;
             --post-it-green: #81C784;
         }
+        /* --- ADD THIS AT THE BOTTOM OF YOUR EXISTING STYLE BLOCK --- */
+
+        /* 1. Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f0f0f; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, transparent, var(--terracotta));
+            border-radius: 10px;
+            border: 2px solid #0f0f0f;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--terracotta);
+            box-shadow: 0 0 15px var(--terracotta);
+        }
+
+        /* 2. Background Mesh Animation */
+        /* Note: This targets the 'body' tag to animate the whole site bg */
+        body {
+            background: linear-gradient(-45deg, #0f0f0f, #1a1a1a, #2c1616, #121212) !important;
+            background-size: 400% 400% !important;
+            animation: meshGradient 12s ease infinite;
+        }
+
+        @keyframes meshGradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* 3. Poppy Hover Effects for Cards */
+        .player-card, .news-article, .post-it, .poll-card {
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
+                        box-shadow 0.3s ease !important;
+        }
+
+        .player-card:hover, .news-article:hover, .post-it:hover, .poll-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5), 0 0 15px var(--terracotta) !important;
+        }
+
+        /* 4. Button Click "Squish" */
+        button:active {
+            transform: scale(0.92);
+        }
+
+        /* --- END OF NEW STUFF --- */
 
         * {
             margin: 0;
