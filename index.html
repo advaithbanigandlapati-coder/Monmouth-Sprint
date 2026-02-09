@@ -7,15 +7,12 @@
     
     <!-- Favicons -->
     <link rel="icon" type="image/x-icon" href="favicon.ico">
-    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="192x192" href="favicon-192x192.png">
-    <link rel="icon" type="image/png" sizes="512x512" href="favicon-512x512.png">
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
     
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
+            /* Light Mode Colors */
             --sunset-orange: #FF6B35;
             --terracotta: #D65A31;
             --warm-amber: #F7931E;
@@ -29,6 +26,51 @@
             --post-it-pink: #FF6B9D;
             --post-it-blue: #4FC3F7;
             --post-it-green: #81C784;
+            
+            /* Theme-specific variables */
+            --bg-primary: linear-gradient(135deg, #FFF8F0 0%, #F4E5D3 100%);
+            --bg-card: #ffffff;
+            --text-primary: #6B2C1F;
+            --text-secondary: #A63D29;
+            --nav-bg: rgba(255, 248, 240, 0.98);
+            --shadow: rgba(166, 61, 41, 0.15);
+            --shadow-hover: rgba(166, 61, 41, 0.25);
+            --border-color: rgba(255, 107, 53, 0.1);
+            --input-bg: #FFF8F0;
+            --scrollbar-track: #F4E5D3;
+            --scrollbar-thumb: #D65A31;
+            --scrollbar-thumb-hover: #A63D29;
+        }
+
+        [data-theme="dark"] {
+            /* Dark Mode Colors */
+            --sunset-orange: #FF8B6A;
+            --terracotta: #FF6B35;
+            --warm-amber: #FFB84D;
+            --sand: #2C2420;
+            --deep-sienna: #FF9770;
+            --cream: #1a1614;
+            --burnt-umber: #E5C4B8;
+            --coral: #FFA38A;
+            --dark-bg: #0f0f0f;
+            --post-it-yellow: #FFD54F;
+            --post-it-pink: #FF8BB5;
+            --post-it-blue: #6DD3FF;
+            --post-it-green: #9CDB9F;
+            
+            /* Theme-specific variables */
+            --bg-primary: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 100%);
+            --bg-card: #1e1e1e;
+            --text-primary: #E5C4B8;
+            --text-secondary: #FFB084;
+            --nav-bg: rgba(30, 30, 30, 0.98);
+            --shadow: rgba(0, 0, 0, 0.5);
+            --shadow-hover: rgba(255, 107, 53, 0.3);
+            --border-color: rgba(255, 139, 106, 0.2);
+            --input-bg: #252525;
+            --scrollbar-track: #1a1a1a;
+            --scrollbar-thumb: #FF6B35;
+            --scrollbar-thumb-hover: #FF8B6A;
         }
         
         * {
@@ -43,9 +85,82 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, var(--cream) 0%, var(--sand) 100%);
-            color: var(--burnt-umber);
+            background: var(--bg-primary);
+            color: var(--text-primary);
             overflow-x: hidden;
+            transition: background 0.5s ease, color 0.3s ease;
+            position: relative;
+        }
+
+        /* Enhanced Background Animation */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(255, 107, 53, 0.3), transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(247, 147, 30, 0.25), transparent 40%),
+                radial-gradient(circle at 50% 50%, rgba(214, 90, 49, 0.2), transparent 50%);
+            background-size: 200% 200%;
+            animation: meshGradient 15s ease infinite;
+            opacity: 1;
+        }
+
+        [data-theme="dark"] body::before {
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(255, 139, 106, 0.4), transparent 35%),
+                radial-gradient(circle at 80% 70%, rgba(255, 184, 77, 0.3), transparent 40%),
+                radial-gradient(circle at 50% 50%, rgba(255, 107, 53, 0.25), transparent 45%),
+                radial-gradient(circle at 40% 80%, rgba(214, 90, 49, 0.2), transparent 50%);
+            background-size: 250% 250%;
+            animation: meshGradientDark 12s ease infinite;
+        }
+
+        @keyframes meshGradient {
+            0%, 100% { background-position: 0% 50%; }
+            25% { background-position: 50% 70%; }
+            50% { background-position: 100% 50%; }
+            75% { background-position: 50% 30%; }
+        }
+
+        @keyframes meshGradientDark {
+            0%, 100% { background-position: 0% 0%; }
+            25% { background-position: 100% 50%; }
+            50% { background-position: 50% 100%; }
+            75% { background-position: 0% 50%; }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 14px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--scrollbar-track);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, var(--scrollbar-thumb), var(--warm-amber));
+            border-radius: 10px;
+            border: 3px solid var(--scrollbar-track);
+            transition: all 0.3s ease;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--scrollbar-thumb-hover);
+            box-shadow: 0 0 20px var(--sunset-orange);
+            transform: scale(1.1);
+        }
+
+        /* Firefox scrollbar */
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
         }
 
         /* Navigation */
@@ -53,12 +168,13 @@
             position: fixed;
             top: 0;
             width: 100%;
-            background: rgba(255, 248, 240, 0.98);
+            background: var(--nav-bg);
             backdrop-filter: blur(12px);
             z-index: 1000;
             padding: 1.2rem 2rem;
-            box-shadow: 0 2px 20px rgba(166, 61, 41, 0.08);
-            border-bottom: 2px solid rgba(255, 107, 53, 0.1);
+            box-shadow: 0 2px 20px var(--shadow);
+            border-bottom: 2px solid var(--border-color);
+            transition: all 0.3s ease;
         }
 
         nav ul {
@@ -72,7 +188,7 @@
 
         nav a {
             text-decoration: none;
-            color: var(--burnt-umber);
+            color: var(--text-primary);
             font-weight: 600;
             font-size: 0.95rem;
             letter-spacing: 0.5px;
@@ -101,6 +217,46 @@
             width: 100%;
         }
 
+        /* Theme Toggle Button with SVG Icon */
+        .theme-toggle {
+            position: fixed;
+            top: 1.2rem;
+            right: 2rem;
+            z-index: 1001;
+            background: var(--bg-card);
+            border: 2px solid var(--border-color);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px var(--shadow);
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 6px 20px var(--shadow-hover);
+        }
+
+        .theme-toggle-icon {
+            width: 24px;
+            height: 24px;
+            transition: transform 0.5s ease;
+        }
+
+        .theme-toggle:hover .theme-toggle-icon {
+            transform: rotate(20deg);
+        }
+
+        .theme-toggle-icon svg {
+            width: 100%;
+            height: 100%;
+            fill: var(--sunset-orange);
+        }
+
         /* Page Sections */
         .page {
             display: none;
@@ -114,8 +270,8 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         /* Home Page */
@@ -126,7 +282,7 @@
             min-height: 100vh;
             position: relative;
             padding: 0 2rem 4rem;
-            }
+        }
 
         #home.active {
             display: flex;
@@ -142,6 +298,12 @@
                         radial-gradient(circle at 70% 60%, rgba(247, 147, 30, 0.1), transparent 50%);
             z-index: 0;
             pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+
+        [data-theme="dark"] .hero-bg {
+            background: radial-gradient(circle at 30% 40%, rgba(255, 139, 106, 0.2), transparent 50%),
+                        radial-gradient(circle at 70% 60%, rgba(255, 184, 77, 0.15), transparent 50%);
         }
 
         .hero-content {
@@ -161,7 +323,7 @@
             letter-spacing: 8px;
             margin-bottom: 0.5rem;
             animation: slideDown 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-            text-shadow: 3px 3px 0 rgba(214, 90, 49, 0.3);
+            text-shadow: 3px 3px 0 var(--terracotta);
         }
 
         @keyframes slideDown {
@@ -209,12 +371,13 @@
         .credits-section {
             position: relative;
             z-index: 1;
-            background: white;
+            background: var(--bg-card);
             border-radius: 20px;
             padding: 3rem;
             margin-top: 8rem;
             max-width: 700px;
-            box-shadow: 0 10px 50px rgba(166, 61, 41, 0.15);
+            box-shadow: 0 10px 50px var(--shadow);
+            transition: all 0.3s ease;
         }
 
         .credits-title {
@@ -231,11 +394,17 @@
         }
 
         .credits-item {
-            background: linear-gradient(135deg, var(--cream), var(--sand));
+            background: linear-gradient(135deg, var(--input-bg), var(--sand));
             padding: 1.5rem;
             margin-bottom: 1rem;
             border-radius: 12px;
             border-left: 4px solid var(--sunset-orange);
+            transition: all 0.3s ease;
+        }
+
+        .credits-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px var(--shadow);
         }
 
         .credits-label {
@@ -248,17 +417,12 @@
         }
 
         .credits-value {
-            color: var(--burnt-umber);
+            color: var(--text-primary);
             font-size: 1.05rem;
             line-height: 1.6;
         }
 
-        /* News Page */
-        .news-container {
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
+        /* Page Header */
         .page-header {
             text-align: center;
             margin-bottom: 4rem;
@@ -278,14 +442,20 @@
             font-weight: 400;
         }
 
+        /* News Page Styles */
+        .news-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
         .news-article {
-            background: white;
+            background: var(--bg-card);
             border-radius: 16px;
             padding: 3rem;
             margin-bottom: 2.5rem;
-            box-shadow: 0 4px 30px rgba(166, 61, 41, 0.1);
+            box-shadow: 0 4px 30px var(--shadow);
             border-left: 6px solid var(--sunset-orange);
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
             position: relative;
             overflow: hidden;
         }
@@ -303,8 +473,8 @@
         }
 
         .news-article:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 40px rgba(166, 61, 41, 0.2);
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 12px 40px var(--shadow-hover);
         }
 
         .news-article:hover::before {
@@ -342,9 +512,20 @@
 
         .news-article p {
             line-height: 1.9;
-            color: var(--burnt-umber);
+            color: var(--text-primary);
             font-size: 1.05rem;
             margin-bottom: 1rem;
+        }
+
+        .news-article ul {
+            margin-left: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .news-article ul li {
+            line-height: 1.9;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
         }
 
         .news-credit {
@@ -356,25 +537,107 @@
             font-weight: 600;
         }
 
-        /* Rankings Page */
+        .news-delete-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(229, 115, 115, 0.9);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .news-delete-btn:hover {
+            background: #d32f2f;
+            transform: scale(1.05);
+        }
+
+        /* News Editor */
+        .news-editor-section {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 3rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 10px 40px var(--shadow);
+            display: none;
+        }
+
+        .news-editor-section.unlocked {
+            display: block;
+        }
+
+        .news-editor-title {
+            font-family: 'Bebas Neue', sans-serif;
+            color: var(--terracotta);
+            font-size: 2rem;
+            letter-spacing: 2px;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 2rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.7rem;
+            font-weight: 600;
+            color: var(--terracotta);
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 1.2rem;
+            border: 2px solid var(--sand);
+            border-radius: 12px;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: var(--input-bg);
+            color: var(--text-primary);
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--sunset-orange);
+            background: var(--bg-card);
+        }
+
+        .form-group textarea {
+            min-height: 300px;
+            resize: vertical;
+        }
+
+        /* Rankings Page Styles */
         .rankings-container {
             max-width: 1200px;
             margin: 0 auto;
         }
 
         .player-card {
-            background: white;
+            background: var(--bg-card);
             border-radius: 20px;
             padding: 3rem;
             margin-bottom: 3rem;
-            box-shadow: 0 8px 40px rgba(166, 61, 41, 0.12);
+            box-shadow: 0 8px 40px var(--shadow);
             border-top: 6px solid var(--warm-amber);
             transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .player-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 15px 50px rgba(166, 61, 41, 0.2);
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 15px 50px var(--shadow-hover);
         }
 
         .player-header {
@@ -404,7 +667,20 @@
             font-weight: 700;
             color: white;
             font-family: 'Bebas Neue', sans-serif;
-            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.4);
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .player-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        .player-card:hover .player-avatar {
+            transform: rotate(360deg) scale(1.1);
         }
 
         .player-name {
@@ -423,11 +699,11 @@
             font-weight: 700;
             font-family: 'Bebas Neue', sans-serif;
             letter-spacing: 2px;
-            box-shadow: 0 4px 20px rgba(255, 107, 53, 0.3);
+            box-shadow: 0 4px 20px rgba(255, 107, 53, 0.4);
         }
 
         .player-description {
-            color: var(--deep-sienna);
+            color: var(--text-secondary);
             margin-bottom: 2.5rem;
             font-size: 1.05rem;
             font-style: italic;
@@ -440,7 +716,7 @@
         }
 
         .stat-row {
-            background: var(--cream);
+            background: var(--input-bg);
             padding: 1.2rem;
             border-radius: 12px;
             transition: all 0.3s ease;
@@ -456,7 +732,7 @@
             justify-content: space-between;
             margin-bottom: 0.8rem;
             font-weight: 600;
-            color: var(--burnt-umber);
+            color: var(--text-primary);
             font-size: 0.95rem;
         }
 
@@ -478,7 +754,7 @@
             background: linear-gradient(90deg, var(--warm-amber), var(--sunset-orange));
             border-radius: 10px;
             transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-            box-shadow: 0 2px 10px rgba(255, 107, 53, 0.4);
+            box-shadow: 0 2px 10px rgba(255, 107, 53, 0.5);
             position: relative;
         }
 
@@ -502,10 +778,10 @@
             text-align: center;
             max-width: 450px;
             margin: 50px auto;
-            background: white;
+            background: var(--bg-card);
             padding: 3rem;
             border-radius: 20px;
-            box-shadow: 0 10px 40px rgba(166, 61, 41, 0.15);
+            box-shadow: 0 10px 40px var(--shadow);
         }
 
         .password-protect h2 {
@@ -517,7 +793,7 @@
         }
 
         .password-protect p {
-            color: var(--burnt-umber);
+            color: var(--text-primary);
             margin-bottom: 1.5rem;
         }
 
@@ -528,9 +804,10 @@
             border-radius: 12px;
             font-size: 1.05rem;
             margin: 1rem 0;
-            background: var(--cream);
+            background: var(--input-bg);
             font-family: 'Inter', sans-serif;
             transition: border-color 0.3s ease;
+            color: var(--text-primary);
         }
 
         .password-protect input:focus {
@@ -560,10 +837,10 @@
 
         .file-links {
             display: none;
-            background: white;
+            background: var(--bg-card);
             border-radius: 20px;
             padding: 3rem;
-            box-shadow: 0 10px 40px rgba(166, 61, 41, 0.15);
+            box-shadow: 0 10px 40px var(--shadow);
         }
 
         .file-links.unlocked {
@@ -580,7 +857,7 @@
         }
 
         .file-link-item {
-            background: linear-gradient(135deg, var(--cream), var(--sand));
+            background: linear-gradient(135deg, var(--input-bg), var(--sand));
             padding: 2rem;
             border-radius: 12px;
             margin-bottom: 1.5rem;
@@ -590,7 +867,7 @@
 
         .file-link-item:hover {
             transform: translateX(10px);
-            box-shadow: 0 5px 20px rgba(166, 61, 41, 0.15);
+            box-shadow: 0 5px 20px var(--shadow);
         }
 
         .file-link-item a {
@@ -611,144 +888,6 @@
             font-size: 1.5rem;
         }
 
-        /* Contact Page */
-        .contact-container {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .contact-info {
-            background: white;
-            border-radius: 20px;
-            padding: 3rem;
-            margin-bottom: 2rem;
-            box-shadow: 0 10px 40px rgba(166, 61, 41, 0.15);
-            text-align: center;
-        }
-
-        .contact-info h3 {
-            font-family: 'Bebas Neue', sans-serif;
-            color: var(--terracotta);
-            font-size: 1.8rem;
-            letter-spacing: 2px;
-            margin-bottom: 2rem;
-        }
-
-        .contact-links {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            flex-wrap: wrap;
-        }
-
-        .contact-link {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 1.5rem;
-            background: var(--cream);
-            border-radius: 12px;
-            text-decoration: none;
-            color: var(--burnt-umber);
-            transition: all 0.3s ease;
-            min-width: 150px;
-        }
-
-        .contact-link:hover {
-            background: var(--sunset-orange);
-            color: white;
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(255, 107, 53, 0.3);
-        }
-
-        .contact-icon {
-            font-size: 2rem;
-        }
-
-        .contact-label {
-            font-weight: 600;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .contact-value {
-            font-size: 0.85rem;
-        }
-
-        .contact-form {
-            background: white;
-            border-radius: 20px;
-            padding: 3.5rem;
-            box-shadow: 0 10px 50px rgba(166, 61, 41, 0.12);
-        }
-
-        .form-group {
-            margin-bottom: 2rem;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 0.7rem;
-            font-weight: 600;
-            color: var(--terracotta);
-            text-transform: uppercase;
-            font-size: 0.9rem;
-            letter-spacing: 1px;
-        }
-
-        .form-group input,
-        .form-group textarea {
-            width: 100%;
-            padding: 1.2rem;
-            border: 2px solid var(--sand);
-            border-radius: 12px;
-            font-family: 'Inter', sans-serif;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-            background: var(--cream);
-        }
-
-        .form-group input:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: var(--sunset-orange);
-            background: white;
-        }
-
-        .form-group textarea {
-            min-height: 180px;
-            resize: vertical;
-        }
-
-        .submit-btn {
-            width: 100%;
-            padding: 1.4rem;
-            background: linear-gradient(135deg, var(--sunset-orange), var(--warm-amber));
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-size: 1.1rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            font-family: 'Bebas Neue', sans-serif;
-        }
-
-        .submit-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.4);
-        }
-
-        /* Bulletin Board - Post-it Note Style */
-        .bulletin-container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
         /* Polls Page */
         .polls-container {
             max-width: 1000px;
@@ -756,12 +895,18 @@
         }
 
         .poll-card {
-            background: white;
+            background: var(--bg-card);
             border-radius: 20px;
             padding: 3rem;
             margin-bottom: 3rem;
-            box-shadow: 0 10px 40px rgba(166, 61, 41, 0.15);
+            box-shadow: 0 10px 40px var(--shadow);
             border-top: 5px solid var(--sunset-orange);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .poll-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 15px 50px var(--shadow-hover);
         }
 
         .poll-question {
@@ -777,7 +922,7 @@
         }
 
         .poll-response-item {
-            background: linear-gradient(135deg, var(--cream), var(--sand));
+            background: linear-gradient(135deg, var(--input-bg), var(--sand));
             padding: 1.2rem;
             margin-bottom: 1rem;
             border-radius: 12px;
@@ -794,10 +939,10 @@
         }
 
         .poll-response-answer {
-            color: var(--burnt-umber);
+            color: var(--text-primary);
             font-size: 1.05rem;
             padding: 0.5rem 1.5rem;
-            background: white;
+            background: var(--bg-card);
             border-radius: 8px;
             font-weight: 600;
         }
@@ -818,7 +963,7 @@
         }
 
         .poll-add-response {
-            background: var(--cream);
+            background: var(--input-bg);
             padding: 2rem;
             border-radius: 12px;
             margin-top: 2rem;
@@ -845,6 +990,8 @@
             border-radius: 8px;
             font-family: 'Inter', sans-serif;
             font-size: 1rem;
+            background: var(--bg-card);
+            color: var(--text-primary);
         }
 
         .poll-input-group input:focus {
@@ -870,6 +1017,10 @@
             font-size: 1rem;
             text-transform: uppercase;
             letter-spacing: 1px;
+        }
+
+        .poll-response-btn:active {
+            transform: scale(0.95);
         }
 
         .poll-response-btn.yes-btn {
@@ -904,11 +1055,11 @@
 
         .create-poll-form {
             display: none;
-            background: white;
+            background: var(--bg-card);
             border-radius: 20px;
             padding: 3rem;
             margin-bottom: 3rem;
-            box-shadow: 0 10px 40px rgba(166, 61, 41, 0.15);
+            box-shadow: 0 10px 40px var(--shadow);
         }
 
         .create-poll-form.unlocked {
@@ -931,6 +1082,8 @@
             font-family: 'Inter', sans-serif;
             font-size: 1rem;
             margin-bottom: 1.5rem;
+            background: var(--input-bg);
+            color: var(--text-primary);
         }
 
         .create-poll-form input:focus {
@@ -958,8 +1111,12 @@
             box-shadow: 0 8px 25px rgba(255, 107, 53, 0.4);
         }
 
+        .create-poll-btn:active {
+            transform: scale(0.95);
+        }
+
         .poll-summary {
-            background: var(--cream);
+            background: var(--input-bg);
             padding: 1.5rem;
             border-radius: 12px;
             margin-top: 1.5rem;
@@ -982,10 +1139,16 @@
 
         .poll-summary-label {
             font-size: 0.9rem;
-            color: var(--burnt-umber);
+            color: var(--text-primary);
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1px;
+        }
+
+        /* Bulletin Board */
+        .bulletin-container {
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
         .bulletin-board {
@@ -1025,7 +1188,7 @@
             border-radius: 2px;
             box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.3);
             position: relative;
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
             min-height: 200px;
             font-family: 'Courier New', monospace;
         }
@@ -1057,8 +1220,8 @@
         }
 
         .post-it:hover {
-            transform: scale(1.05) rotate(0deg) !important;
-            box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.4);
+            transform: scale(1.08) rotate(0deg) !important;
+            box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.5);
             z-index: 10;
         }
 
@@ -1102,7 +1265,7 @@
             display: none;
             margin-top: 2.5rem;
             padding: 2.5rem;
-            background: white;
+            background: var(--bg-card);
             border-radius: 16px;
             position: relative;
             z-index: 1;
@@ -1129,6 +1292,8 @@
             min-height: 120px;
             margin-bottom: 1.5rem;
             font-size: 1rem;
+            background: var(--input-bg);
+            color: var(--text-primary);
         }
 
         .add-bulletin-form textarea:focus {
@@ -1156,11 +1321,106 @@
             box-shadow: 0 8px 25px rgba(255, 107, 53, 0.4);
         }
 
-        .error-message {
+        .add-bulletin-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Contact Page */
+        .contact-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .contact-info {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 40px var(--shadow);
+            text-align: center;
+        }
+
+        .contact-info h3 {
+            font-family: 'Bebas Neue', sans-serif;
             color: var(--terracotta);
-            font-size: 0.9rem;
-            margin-top: 0.8rem;
+            font-size: 1.8rem;
+            letter-spacing: 2px;
+            margin-bottom: 2rem;
+        }
+
+        .contact-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .contact-link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1.5rem;
+            background: var(--input-bg);
+            border-radius: 12px;
+            text-decoration: none;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            min-width: 150px;
+        }
+
+        .contact-link:hover {
+            background: var(--sunset-orange);
+            color: white;
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(255, 107, 53, 0.3);
+        }
+
+        .contact-icon {
+            font-size: 2rem;
+        }
+
+        .contact-label {
             font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .contact-value {
+            font-size: 0.85rem;
+        }
+
+        .contact-form {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 3.5rem;
+            box-shadow: 0 10px 50px var(--shadow);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 1.4rem;
+            background: linear-gradient(135deg, var(--sunset-orange), var(--warm-amber));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-family: 'Bebas Neue', sans-serif;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.4);
+        }
+
+        .submit-btn:active {
+            transform: scale(0.95);
         }
 
         /* Loading Indicator */
@@ -1171,8 +1431,22 @@
             font-style: italic;
         }
 
+        .error-message {
+            color: var(--terracotta);
+            font-size: 0.9rem;
+            margin-top: 0.8rem;
+            font-weight: 600;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
+            .theme-toggle {
+                top: 0.8rem;
+                right: 1rem;
+                width: 45px;
+                height: 45px;
+            }
+
             nav {
                 padding: 1rem;
             }
@@ -1220,17 +1494,34 @@
                 font-size: 1.5rem;
             }
 
-            .news-article,
             .player-card,
-            .contact-form,
-            .bulletin-board,
+            .news-article,
             .poll-card,
-            .create-poll-form {
+            .contact-form,
+            .bulletin-board {
                 padding: 1.5rem;
             }
 
             .page-title {
                 font-size: 2.5rem;
+            }
+
+            .credits-section {
+                padding: 2rem;
+                margin-top: 4rem;
+            }
+
+            .credits-title {
+                font-size: 2rem;
+            }
+
+            .credits-item {
+                padding: 1rem;
+            }
+
+            .scroll-indicator {
+                bottom: 2rem;
+                font-size: 0.75rem;
             }
 
             .post-it-grid {
@@ -1255,76 +1546,23 @@
                 gap: 0.8rem;
             }
 
-            .credits-section {
-                padding: 2rem;
-                margin-top: 4rem;
-            }
-
-            .credits-title {
-                font-size: 2rem;
-            }
-
-            .credits-item {
-                padding: 1rem;
-            }
-
             .news-article h2 {
                 font-size: 1.8rem;
             }
-
-            .scroll-indicator {
-                bottom: 2rem;
-                font-size: 0.75rem;
-            }
-        }
-        /* 1. Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 12px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #0f0f0f; 
-        }
-        ::-webkit-scrollbar-thumb {
-            background: linear-gradient(180deg, transparent, var(--terracotta));
-            border-radius: 10px;
-            border: 2px solid #0f0f0f;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--terracotta);
-            box-shadow: 0 0 15px var(--terracotta);
-        }
-
-        /* 2. Background Mesh Animation */
-        body {
-            background: linear-gradient(-45deg, #0f0f0f, #1a1a1a, #2c1616, #121212);
-            background-size: 400% 400%;
-            animation: meshGradient 12s ease infinite;
-        }
-        @keyframes meshGradient {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        /* 3. Poppy Hover Effects */
-        .player-card, .news-article, .post-it, .poll-card {
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
-                        box-shadow 0.3s ease;
-        }
-        .player-card:hover, .news-article:hover, .post-it:hover, .poll-card:hover {
-            transform: translateY(-8px) scale(1.02);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5), 0 0 15px var(--terracotta);
-            border-color: var(--terracotta);
-            z-index: 10; /* Brings it to the front */
-        }
-
-        /* 4. Button Squish Effect */
-        button:active {
-            transform: scale(0.95);
         }
     </style>
 </head>
 <body>
+    <!-- Theme Toggle Button with SVG -->
+    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+        <div class="theme-toggle-icon" id="themeIcon">
+            <!-- Moon icon (shown in light mode) -->
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+        </div>
+    </button>
+
     <!-- Navigation -->
     <nav>
         <ul>
@@ -1375,48 +1613,88 @@
                 <p class="page-subtitle">Stay updated with good boy news and announcements</p>
             </div>
             
-            <div class="news-article">
-                <h2>BREAKING: Leaked "Super-Villain Trio" Photo Confirms Epstein, Diddy, and Mysterious Adihkiya Were Planning the World's Most Awkward Pool Party</h2>
-                <div class="news-meta">
-                    <span class="news-date">February 1, 2026</span>
-                    <span class="news-category">Breaking News</span>
+            <!-- Password Protected News Editor -->
+            <div class="password-protect" id="newsEditorPasswordSection">
+                <h2>News Editor Access</h2>
+                <p>Enter password to create news articles</p>
+                <input type="password" id="newsEditorPassword" placeholder="Enter password">
+                <button onclick="unlockNewsEditor()">Unlock Editor</button>
+                <p class="error-message" id="newsEditorError"></p>
+            </div>
+
+            <!-- News Editor Form -->
+            <div class="news-editor-section" id="newsEditorForm">
+                <h2 class="news-editor-title">Create New Article</h2>
+                <form onsubmit="createNewsArticle(event)">
+                    <div class="form-group">
+                        <label for="newsTitle">Article Title</label>
+                        <input type="text" id="newsTitle" placeholder="Enter article title" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="newsCategory">Category</label>
+                        <input type="text" id="newsCategory" placeholder="e.g., Breaking News, Updates" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="newsContent">Article Content</label>
+                        <textarea id="newsContent" placeholder="Write your article content here... Use <p> tags for paragraphs, <strong> for bold text, etc." required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="newsCredit">Credit/Author</label>
+                        <input type="text" id="newsCredit" placeholder="e.g., MADE BY GROK">
+                    </div>
+                    
+                    <button type="submit" class="submit-btn">Publish Article</button>
+                </form>
+            </div>
+            
+            <!-- News Articles List -->
+            <div id="newsArticlesList">
+                <div class="news-article">
+                    <h2>BREAKING: Leaked "Super-Villain Trio" Photo Confirms Epstein, Diddy, and Mysterious Adihkiya Were Planning the World's Most Awkward Pool Party</h2>
+                    <div class="news-meta">
+                        <span class="news-date">February 1, 2026</span>
+                        <span class="news-category">Breaking News</span>
+                    </div>
+                    <p>In a bombshell development that's rocking conspiracy TikTok harder than a malfunctioning fidget spinner, grainy surveillance footage has surfaced showing Jeffrey Epstein, Sean "P. Diddy" Combs, and a shadowy figure identified only as Adihkiya huddled together at what experts are calling "the most cursed Zoom happy hour of 2008."</p>
+                    
+                    <p>According to sources who definitely exist (trust me, bro), the trio wasn't plotting world domination or running a secret island resort chain. No, no—they were allegedly planning the ultimate VIP foam party, but things got weird fast.</p>
+                    
+                    <p><strong>Exhibit A: The Guest List Drama</strong><br>
+                    Epstein reportedly insisted on inviting only people with private jets "for vibes." Diddy countered with, "Nah, we need at least three celebrity baby oil sponsors and a fog machine that plays my greatest hits." Adihkiya—described by one blurry witness as "kinda looks like a sun god who got lost on his way to Coachella"—quietly suggested adding glow-in-the-dark piñatas filled with... wait for it... legal documents. The room allegedly fell silent for 47 seconds before Epstein muttered, "That's... actually iconic."</p>
+                    
+                    <p><strong>Exhibit B: The Snack Table Meltdown</strong><br>
+                    Things escalated when the charcuterie board arrived. Epstein wanted caviar shaped like tiny islands. Diddy demanded "freak-off flavored" popcorn (patent pending). Adihkiya, ever the chill one, brought homemade solar-powered samosas because "the sun god energy pairs well with chutney." Chaos ensued when someone (allegedly Diddy) tried to "remix" the samosas with baby oil. The fire alarm went off. No one knows why.</p>
+                    
+                    <p><strong>Exhibit C: The Group Chat Leaks</strong><br>
+                    Screenshots obtained from a burner phone buried under a pile of unused party favors reveal the following gems:</p>
+                    <ul>
+                        <li>Epstein: "Island next weekend? Bring the vibes 😏"</li>
+                        <li>Diddy: "Only if we get the white parties white party 2.0. Glow sticks mandatory."</li>
+                        <li>Adihkiya: "Guys the sun sets at 7:42. We doing golden hour selfies or what? ☀️🔥"</li>
+                        <li>Epstein: "Adihkiya always bringing that divine positivity. Respect."</li>
+                        <li>Diddy: "Bro you're literally the sun god emoji personified. Teach me your ways."</li>
+                        <li>Adihkiya: "It's easy. Just radiate. Also avoid subpoenas, they block the chakras."</li>
+                    </ul>
+                    
+                    <p><strong>The Twist No One Saw Coming</strong><br>
+                    Investigative journalists (okay, one guy on Reddit) now believe Adihkiya wasn't even human—he was a rogue solar deity who accidentally wandered into the wrong elite after-party in the Hamptons and got stuck in the group chat. His only crime? Trying to turn every scandal into a wellness retreat. "Namaste away from the feds," he allegedly texted right before vanishing in a puff of SPF 1000 glitter.</p>
+                    
+                    <p><strong>Where Are They Now?</strong></p>
+                    <ul>
+                        <li><strong>Epstein:</strong> Classic "moved to permanent timeout."</li>
+                        <li><strong>Diddy:</strong> Busy fighting lawsuits and probably still pitching Freak-Off Fest 2026.</li>
+                        <li><strong>Adihkiya:</strong> Last spotted ascending a sunbeam somewhere over Ibiza, yelling "I just wanted to network!"</li>
+                    </ul>
+                    
+                    <p>Moral of the story: Never trust a pool party invite from billionaires... or sun gods. Especially when baby oil is on the rider.</p>
+                    
+                    <p>Stay goofy, stay hydrated, and maybe don't google this trio at 3 a.m. 😭🕶️☀️</p>
+                    
+                    <p class="news-credit">MADE BY GROK</p>
                 </div>
-                <p>In a bombshell development that's rocking conspiracy TikTok harder than a malfunctioning fidget spinner, grainy surveillance footage has surfaced showing Jeffrey Epstein, Sean "P. Diddy" Combs, and a shadowy figure identified only as Adihkiya huddled together at what experts are calling "the most cursed Zoom happy hour of 2008."</p>
-                
-                <p>According to sources who definitely exist (trust me, bro), the trio wasn't plotting world domination or running a secret island resort chain. No, no—they were allegedly planning the ultimate VIP foam party, but things got weird fast.</p>
-                
-                <p><strong>Exhibit A: The Guest List Drama</strong><br>
-                Epstein reportedly insisted on inviting only people with private jets "for vibes." Diddy countered with, "Nah, we need at least three celebrity baby oil sponsors and a fog machine that plays my greatest hits." Adihkiya—described by one blurry witness as "kinda looks like a sun god who got lost on his way to Coachella"—quietly suggested adding glow-in-the-dark piñatas filled with... wait for it... legal documents. The room allegedly fell silent for 47 seconds before Epstein muttered, "That's... actually iconic."</p>
-                
-                <p><strong>Exhibit B: The Snack Table Meltdown</strong><br>
-                Things escalated when the charcuterie board arrived. Epstein wanted caviar shaped like tiny islands. Diddy demanded "freak-off flavored" popcorn (patent pending). Adihkiya, ever the chill one, brought homemade solar-powered samosas because "the sun god energy pairs well with chutney." Chaos ensued when someone (allegedly Diddy) tried to "remix" the samosas with baby oil. The fire alarm went off. No one knows why.</p>
-                
-                <p><strong>Exhibit C: The Group Chat Leaks</strong><br>
-                Screenshots obtained from a burner phone buried under a pile of unused party favors reveal the following gems:</p>
-                <ul style="margin-left: 2rem; margin-bottom: 1rem;">
-                    <li>Epstein: "Island next weekend? Bring the vibes 😏"</li>
-                    <li>Diddy: "Only if we get the white parties white party 2.0. Glow sticks mandatory."</li>
-                    <li>Adihkiya: "Guys the sun sets at 7:42. We doing golden hour selfies or what? ☀️🔥"</li>
-                    <li>Epstein: "Adihkiya always bringing that divine positivity. Respect."</li>
-                    <li>Diddy: "Bro you're literally the sun god emoji personified. Teach me your ways."</li>
-                    <li>Adihkiya: "It's easy. Just radiate. Also avoid subpoenas, they block the chakras."</li>
-                </ul>
-                
-                <p><strong>The Twist No One Saw Coming</strong><br>
-                Investigative journalists (okay, one guy on Reddit) now believe Adihkiya wasn't even human—he was a rogue solar deity who accidentally wandered into the wrong elite after-party in the Hamptons and got stuck in the group chat. His only crime? Trying to turn every scandal into a wellness retreat. "Namaste away from the feds," he allegedly texted right before vanishing in a puff of SPF 1000 glitter.</p>
-                
-                <p><strong>Where Are They Now?</strong></p>
-                <ul style="margin-left: 2rem; margin-bottom: 1rem;">
-                    <li><strong>Epstein:</strong> Classic "moved to permanent timeout."</li>
-                    <li><strong>Diddy:</strong> Busy fighting lawsuits and probably still pitching Freak-Off Fest 2026.</li>
-                    <li><strong>Adihkiya:</strong> Last spotted ascending a sunbeam somewhere over Ibiza, yelling "I just wanted to network!"</li>
-                </ul>
-                
-                <p>Moral of the story: Never trust a pool party invite from billionaires... or sun gods. Especially when baby oil is on the rider.</p>
-                
-                <p>Stay goofy, stay hydrated, and maybe don't google this trio at 3 a.m. 😭🕶️☀️</p>
-                
-                <p class="news-credit">MADE BY GROK</p>
             </div>
         </div>
     </div>
@@ -1537,10 +1815,10 @@
                         <div class="contact-label">GitHub</div>
                         <div class="contact-value">@advaithbanigandlapati-coder</div>
                     </a>
-                    <a href="mailto:advaith.banigandlapati@gmail.com" class="contact-link">
+                    <a href="/cdn-cgi/l/email-protection#ff9e9b899e968b97d19d9e9196989e919b939e8f9e8b96bf98929e9693d19c9092" class="contact-link">
                         <div class="contact-icon">📧</div>
                         <div class="contact-label">Email</div>
-                        <div class="contact-value">advaith.banigandlapati@gmail.com</div>
+                        <div class="contact-value"><span class="__cf_email__" data-cfemail="b0d1d4c6d1d9c4d89ed2d1ded9d7d1ded4dcd1c0d1c4d9f0d7ddd1d9dc9ed3dfdd">[email&#160;protected]</span></div>
                     </a>
                 </div>
             </div>
@@ -1575,7 +1853,7 @@
     </div>
 
     <!-- Firebase SDK -->
-    <script type="module">
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script type="module">
         // Import Firebase modules
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
         import { getDatabase, ref, set, push, onValue, remove, update } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
@@ -1608,10 +1886,72 @@
         // Initialize data listeners
         initializePollsListener();
         initializeBulletinListener();
+        initializeNewsListener();
     </script>
 
     <script>
-        // Smooth Navigation
+        // ==================== THEME TOGGLE WITH SVG ====================
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            const themeIcon = document.getElementById('themeIcon');
+            
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            
+            // Update SVG icon
+            if (newTheme === 'dark') {
+                // Sun icon
+                themeIcon.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="5"/>
+                        <line x1="12" y1="1" x2="12" y2="3"/>
+                        <line x1="12" y1="21" x2="12" y2="23"/>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                        <line x1="1" y1="12" x2="3" y2="12"/>
+                        <line x1="21" y1="12" x2="23" y2="12"/>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                    </svg>
+                `;
+            } else {
+                // Moon icon
+                themeIcon.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                    </svg>
+                `;
+            }
+        }
+
+        // Load saved theme on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            const themeIcon = document.getElementById('themeIcon');
+            
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            
+            // Set initial icon
+            if (savedTheme === 'dark') {
+                themeIcon.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="5"/>
+                        <line x1="12" y1="1" x2="12" y2="3"/>
+                        <line x1="12" y1="21" x2="12" y2="23"/>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                        <line x1="1" y1="12" x2="3" y2="12"/>
+                        <line x1="21" y1="12" x2="23" y2="12"/>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                    </svg>
+                `;
+            }
+        });
+
+        // ==================== NAVIGATION ====================
         const navLinks = document.querySelectorAll('.nav-link');
         const pages = document.querySelectorAll('.page');
 
@@ -1638,10 +1978,11 @@
             });
         });
 
-        // Player Rankings Data
+        // ==================== PLAYER RANKINGS ====================
         const playersData = [
             {
                 name: "Arjun",
+                image: "arjun.jpeg",
                 overall: 6.5,
                 description: "Good Support Player, Reflex Issues",
                 stats: {
@@ -1656,6 +1997,7 @@
             },
             {
                 name: "Aadi",
+                image: "aadi.jpeg",
                 overall: 7.2,
                 description: "Good Offensive Player, Height Disadvantage",
                 stats: {
@@ -1670,6 +2012,7 @@
             },
             {
                 name: "Abhi",
+                image: "abhi.jpeg",
                 overall: 6,
                 description: "Good Player, Has Teamwork and Safety Issues",
                 stats: {
@@ -1684,6 +2027,7 @@
             },
             {
                 name: "Advaith",
+                image: "advaith.jpeg",
                 overall: 4.7,
                 description: "Rookie, Decent sets and spikes",
                 stats: {
@@ -1698,6 +2042,7 @@
             },
             {
                 name: "Rishu",
+                image: "rishu.jpeg",
                 overall: 7.7,
                 description: "Well Seasoned Player, created the Rishu Spike",
                 stats: {
@@ -1711,7 +2056,23 @@
                 }
             },
             {
+                name: "Daivik",
+                image: "daivik.jpeg",
+                overall: 7.4,
+                description: "Exceptional All-Around Player, Strong Team Communicator",
+                stats: {
+                    reflexes: 7,
+                    spikes: 7.5,
+                    sets: 7,
+                    bumps: 6.5,
+                    safety: 7,
+                    logic: 7.5,
+                    teamwork: 8
+                }
+            },
+            {
                 name: "Swayam",
+                image: "swayam.jpeg",
                 overall: 0,
                 description: "Adjudication Pending",
                 stats: {
@@ -1746,8 +2107,6 @@
                     teamwork: 'Teamwork/Coordination'
                 };
 
-                const initials = player.name.substring(0, 2).toUpperCase();
-
                 let statsHTML = '<div class="stats-grid">';
                 for (const [key, value] of Object.entries(player.stats)) {
                     const level = value < 3 ? 'Beginner' : value < 6 ? 'Intermediate' : value < 8.5 ? 'Advanced' : 'Expert';
@@ -1769,7 +2128,9 @@
                 card.innerHTML = `
                     <div class="player-header">
                         <div class="player-info">
-                            <div class="player-avatar">${initials}</div>
+                            <div class="player-avatar">
+                                <img src="${player.image}" alt="${player.name}">
+                            </div>
                             <h2 class="player-name">${player.name}</h2>
                         </div>
                         <div class="overall-rating">${player.overall}/10</div>
@@ -1784,7 +2145,111 @@
 
         generatePlayerRankings();
 
-        // Files Page Password Protection
+        // ==================== NEWS EDITOR ====================
+        let newsEditorUnlocked = false;
+
+        function unlockNewsEditor() {
+            const password = document.getElementById('newsEditorPassword').value;
+            const errorElement = document.getElementById('newsEditorError');
+            
+            if (password === 'EpsteinBlud67') {
+                newsEditorUnlocked = true;
+                document.getElementById('newsEditorPasswordSection').style.display = 'none';
+                document.getElementById('newsEditorForm').classList.add('unlocked');
+                errorElement.textContent = '';
+            } else {
+                errorElement.textContent = 'Incorrect password. Please try again.';
+            }
+        }
+
+        function createNewsArticle(event) {
+            event.preventDefault();
+            
+            const title = document.getElementById('newsTitle').value;
+            const category = document.getElementById('newsCategory').value;
+            const content = document.getElementById('newsContent').value;
+            const credit = document.getElementById('newsCredit').value;
+            
+            const today = new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+            
+            const newsRef = window.firebaseRef(window.firebaseDB, 'newsArticles');
+            const newArticleRef = window.firebasePush(newsRef);
+            
+            window.firebaseSet(newArticleRef, {
+                title: title,
+                category: category,
+                content: content,
+                credit: credit,
+                date: today,
+                timestamp: Date.now()
+            }).then(() => {
+                // Clear form
+                document.getElementById('newsTitle').value = '';
+                document.getElementById('newsCategory').value = '';
+                document.getElementById('newsContent').value = '';
+                document.getElementById('newsCredit').value = '';
+                alert('Article published successfully!');
+            }).catch((error) => {
+                alert('Error publishing article: ' + error.message);
+            });
+        }
+
+        function initializeNewsListener() {
+            const newsRef = window.firebaseRef(window.firebaseDB, 'newsArticles');
+            window.firebaseOnValue(newsRef, (snapshot) => {
+                const data = snapshot.val();
+                renderNewsArticles(data);
+            });
+        }
+
+        function renderNewsArticles(data) {
+            const container = document.getElementById('newsArticlesList');
+            
+            // Keep the default article at the top
+            const defaultArticle = container.querySelector('.news-article');
+            container.innerHTML = '';
+            container.appendChild(defaultArticle);
+            
+            if (data) {
+                const articles = Object.entries(data).map(([id, article]) => ({ id, ...article }));
+                // Sort by timestamp, newest first
+                articles.sort((a, b) => b.timestamp - a.timestamp);
+                
+                articles.forEach(article => {
+                    const articleDiv = document.createElement('div');
+                    articleDiv.className = 'news-article';
+                    
+                    articleDiv.innerHTML = `
+                        ${newsEditorUnlocked ? `<button class="news-delete-btn" onclick="deleteNewsArticle('${article.id}')">Delete</button>` : ''}
+                        <h2>${article.title}</h2>
+                        <div class="news-meta">
+                            <span class="news-date">${article.date}</span>
+                            <span class="news-category">${article.category}</span>
+                        </div>
+                        ${article.content}
+                        ${article.credit ? `<p class="news-credit">${article.credit}</p>` : ''}
+                    `;
+                    
+                    container.appendChild(articleDiv);
+                });
+            }
+        }
+
+        function deleteNewsArticle(articleId) {
+            if (confirm('Are you sure you want to delete this article?')) {
+                const articleRef = window.firebaseRef(window.firebaseDB, `newsArticles/${articleId}`);
+                window.firebaseRemove(articleRef).catch((error) => {
+                    alert('Error deleting article: ' + error.message);
+                });
+            }
+        }
+
+        // Make functions globally available
+        window.unlockNewsEditor = unlockNewsEditor;
+        window.createNewsArticle = createNewsArticle;
+        window.deleteNewsArticle = deleteNewsArticle;
+
+        // ==================== FILES PAGE ====================
         function unlockFiles() {
             const password = document.getElementById('filesPassword').value;
             const errorElement = document.getElementById('filesError');
@@ -1797,6 +2262,8 @@
                 errorElement.textContent = 'Incorrect password. Please try again.';
             }
         }
+
+        window.unlockFiles = unlockFiles;
 
         // ==================== BULLETIN BOARD WITH FIREBASE ====================
         let bulletinUnlocked = false;
@@ -2017,9 +2484,7 @@
         window.createNewPoll = createNewPoll;
         window.submitPollResponse = submitPollResponse;
 
-        // ==================== OTHER FUNCTIONALITY ====================
-
-        // Contact Form Handler
+        // ==================== CONTACT FORM ====================
         function handleContactSubmit(event) {
             event.preventDefault();
             alert('Thank you for your message! We\'ll get back to you as soon as possible.');
@@ -2028,7 +2493,7 @@
 
         window.handleContactSubmit = handleContactSubmit;
 
-        // Add enter key support for password fields
+        // ==================== ENTER KEY SUPPORT ====================
         document.getElementById('filesPassword')?.addEventListener('keypress', function(e) {
             if (e.key === 'Enter') unlockFiles();
         });
@@ -2041,19 +2506,13 @@
             if (e.key === 'Enter') unlockPolls();
         });
 
-        // Hide scroll indicator when scrolling on home page
+        document.getElementById('newsEditorPassword')?.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') unlockNewsEditor();
+        });
+
+        // ==================== SCROLL INDICATOR ====================
         window.addEventListener('scroll', function() {
             const scrollIndicator = document.querySelector('.scroll-indicator');
             const homePage = document.getElementById('home');
             
-            if (homePage && homePage.classList.contains('active')) {
-                if (window.scrollY > 100) {
-                    scrollIndicator.style.opacity = '0';
-                } else {
-                    scrollIndicator.style.opacity = '1';
-                }
-            }
-        });
-    </script>
-</body>
-</html>
+            if (homePage && homePage.classList.contains('
